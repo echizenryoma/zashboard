@@ -2,6 +2,7 @@ import { fetchLogsAPI } from '@/api'
 import { LOG_LEVEL } from '@/config'
 import type { Log, LogWithSeq } from '@/types'
 import { useStorage } from '@vueuse/core'
+import { throttle } from 'lodash'
 import { ref, watch } from 'vue'
 import { logRetentionLimit, sourceIPLabelMap } from './settings'
 
@@ -11,10 +12,17 @@ export const isPaused = ref(false)
 export const logLevel = useStorage<string>('config/log-level', LOG_LEVEL.Info)
 
 let cancel: () => void
+let logsTemp: LogWithSeq[] = []
+
+const sliceLogs = throttle(() => {
+  logs.value = logsTemp.concat(logs.value).slice(-logRetentionLimit.value)
+  logsTemp = []
+}, 500)
 
 export const initLogs = () => {
   cancel?.()
   logs.value = []
+  logsTemp = []
 
   let idx = 1
   const ws = fetchLogsAPI<Log>({
@@ -35,13 +43,13 @@ export const initLogs = () => {
       }
     }
 
-    logs.value.unshift({
+    logsTemp.unshift({
       ...data,
       time: new Date().valueOf(),
       seq: idx++,
     })
 
-    logs.value = logs.value.slice(0, logRetentionLimit.value)
+    sliceLogs()
   })
 
   cancel = () => {

@@ -1,7 +1,7 @@
 <template>
   <div
     ref="parentRef"
-    class="h-full w-full overflow-auto p-2"
+    class="h-full w-full overflow-y-auto contain-strict"
   >
     <div
       :style="{
@@ -10,9 +10,9 @@
       class="relative w-full"
     >
       <div
-        class="absolute left-0 top-0 w-full"
+        class="absolute left-0 top-0 w-full p-2"
         :style="{
-          transform: `translateY(${virtualRows[0]?.start ?? 0}px)`,
+          transform: `translateY(${virtualRows[0]?.start}px)`,
         }"
       >
         <div
