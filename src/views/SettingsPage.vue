@@ -112,8 +112,6 @@
         {{ $t('backend') }}
       </div>
       <div class="card-body gap-4">
-        <DnsQuery />
-        <div class="divider"></div>
         <BackendSwitch />
         <div
           class="flex items-center gap-2"
@@ -169,6 +167,8 @@
             {{ $t('flushFakeIP') }}
           </button>
         </div>
+        <div class="divider"></div>
+        <DnsQuery />
       </div>
     </div>
 
