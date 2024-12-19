@@ -14,6 +14,7 @@
         <RuleCard
           :key="rule.payload"
           :rule="rule"
+          :index="rules.indexOf(rule) + 1"
         />
       </template>
     </VirtualScroller>
