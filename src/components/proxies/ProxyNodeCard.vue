@@ -34,7 +34,7 @@
         {{ typeDescription }}
       </span>
       <LatencyTag
-        :class="[isLatencyTesting ? 'animate-pulse' : '']"
+        :class="['h-4 w-8', isLatencyTesting ? 'animate-pulse cursor-wait' : '']"
         :name="node.name"
         @click.stop="handlerLatencyTest"
       />

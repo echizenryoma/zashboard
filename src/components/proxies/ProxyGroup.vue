@@ -1,7 +1,7 @@
 <template>
   <CollapseCard :name="proxyGroup.name">
     <template v-slot:title>
-      <div class="flex items-center gap-2 pr-6">
+      <div class="flex items-center gap-2 pr-5">
         <div class="flex flex-1 items-center gap-1">
           <ProxyIcon
             v-if="proxyGroup.icon"
@@ -16,12 +16,17 @@
           </span>
         </div>
         <LatencyTag
-          :class="twMerge('z-10 bg-base-200/40', isLatencyTesting ? 'animate-pulse' : '')"
+          :class="
+            twMerge(
+              'z-10 h-5 w-9 hover:shadow max-sm:bg-base-200/40',
+              isLatencyTesting ? 'animate-pulse cursor-wait bg-base-300' : '',
+            )
+          "
           :name="proxyGroup.now"
           @click.stop="handlerLatencyTest"
         />
       </div>
-      <div class="flex items-center gap-2 text-sm text-slate-500">
+      <div class="flex items-center gap-2 text-xs text-slate-500">
         <div class="flex-1">{{ proxyGroup.type }} ({{ proxyGroup.all?.length }})</div>
         <div class="shrink-0">{{ prettyBytesHelper(downloadTotal) }}/s</div>
       </div>

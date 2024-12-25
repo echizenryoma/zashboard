@@ -1,7 +1,10 @@
 <template>
   <div
     :class="
-      twMerge('flex h-4 w-8 items-center justify-center rounded-xl bg-base-100 text-xs', color)
+      twMerge(
+        'flex items-center justify-center rounded-xl bg-base-100 text-xs hover:bg-slate-100',
+        color,
+      )
     "
   >
     <BoltIcon
