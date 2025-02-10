@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col gap-3">
+  <div class="flex flex-col gap-4">
     <span>{{ $t('customCardLines') }}</span>
-    <div class="flex gap-2">
+    <div class="flex items-center gap-2">
       <button
         class="btn btn-sm"
         @click="((connectionCardLines = SIMPLE_CARD_STYLE), setRestOfColumns())"
@@ -63,7 +63,7 @@
       >
         <template #item="{ element }">
           <div
-            class="flex h-8 cursor-move select-none items-center rounded bg-neutral px-2 text-neutral-content"
+            class="flex h-8 cursor-move select-none items-center rounded bg-base-200 px-2 text-base-content"
           >
             {{ $t(element) }}
           </div>

@@ -1,8 +1,8 @@
 <template>
   <div>{{ $t('customTableColumns') }}</div>
-  <div class="flex rounded">
+  <div class="flex gap-4 rounded">
     <Draggable
-      class="flex flex-1 flex-col gap-2 bg-base-200 p-2"
+      class="flex flex-1 flex-col gap-2 bg-base-300 p-4"
       v-model="connectionTableColumns"
       group="list"
       :animation="150"
@@ -17,7 +17,7 @@
       </template>
     </Draggable>
     <Draggable
-      class="flex flex-1 flex-col gap-2 p-2"
+      class="flex flex-1 flex-col gap-2 p-4"
       v-model="restOfColumns"
       group="list"
       :animation="150"
@@ -25,7 +25,7 @@
     >
       <template #item="{ element }">
         <div
-          class="flex h-8 cursor-move select-none items-center justify-center rounded bg-neutral px-2 text-neutral-content"
+          class="flex h-8 cursor-move select-none items-center justify-center rounded bg-base-200 px-2 text-base-content"
         >
           {{ $t(element) }}
         </div>
