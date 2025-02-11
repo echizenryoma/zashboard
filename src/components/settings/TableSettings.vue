@@ -2,7 +2,7 @@
   <div>{{ $t('customTableColumns') }}</div>
   <div class="flex gap-4 rounded">
     <Draggable
-      class="flex flex-1 flex-col gap-2 bg-base-300 p-4"
+      class="flex flex-1 flex-col gap-2 bg-base-200 p-4"
       v-model="connectionTableColumns"
       group="list"
       :animation="150"

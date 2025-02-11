@@ -3,10 +3,10 @@
   <div class="card card-compact">
     <div class="card-title px-4 pt-4">
       {{ $t('backend') }}
+      <BackendVersion class="text-sm font-normal" />
     </div>
     <div class="card-body gap-4">
       <BackendSwitch />
-      <BackendVersion />
 
       <template v-if="!isSingBox && configs">
         <div class="divider"></div>

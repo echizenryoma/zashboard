@@ -8,7 +8,7 @@
     <input
       v-model="inputValue"
       type="text"
-      class="input input-sm join-item input-bordered w-full"
+      :class="['input input-sm join-item input-bordered w-full', { 'pr-6': clearable }]"
       :placeholder="placeholder || ''"
       :name="name || ''"
       :autocomplete="autocomplete || ''"

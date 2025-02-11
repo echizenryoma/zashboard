@@ -55,6 +55,10 @@
   scrollbar-width: none; /* Firefox */
 }
 
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
 .tippy-box {
   @apply z-[9999] bg-neutral text-neutral-content shadow-md;
 }

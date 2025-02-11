@@ -48,7 +48,6 @@ const ru: LANG_MESSAGE = {
   customTableColumns: 'Пользовательские столбцы таблицы',
   customCardLines: 'Пользовательские строчки карточки',
   close: 'Закрыть',
-  details: 'Детали',
   theme: 'Тема',
   proxyProvider: 'Провайдер прокси',
   ruleProvider: 'Провайдер правил',

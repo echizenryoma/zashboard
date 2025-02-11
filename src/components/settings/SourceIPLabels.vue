@@ -6,9 +6,12 @@
       :key="ip"
       class="flex items-center gap-2"
     >
-      {{ ip }} <ArrowRightCircleIcon class="h-4 w-4" />
+      <TagIcon class="h-4 w-4 shrink-0" />
+      <span class="min-w-28 break-all">
+        {{ ip }}
+      </span>
       <TextInput
-        class="w-40 max-sm:flex-1"
+        class="w-40 min-w-24 max-sm:flex-1"
         v-model="sourceIPLabelMap[ip]"
       />
       <button
@@ -19,16 +22,17 @@
       </button>
     </div>
     <div class="flex w-full items-center gap-2">
-      <span class="shrink-0">IP </span>
       <TextInput
         class="w-36 flex-1 sm:max-w-40"
         v-model="newLabelForIP.ip"
         @click="handlerIPInputFocus"
+        placeholder="IP"
       />
       <ArrowRightCircleIcon class="h-4 w-4 shrink-0" />
       <TextInput
         class="w-24 sm:w-32"
         v-model="newLabelForIP.label"
+        :placeholder="$t('label')"
       />
       <button
         class="btn btn-circle btn-sm"
@@ -44,7 +48,12 @@
 import { useTooltip } from '@/helper/tooltip'
 import { connections } from '@/store/connections'
 import { sourceIPLabelMap } from '@/store/settings'
-import { ArrowRightCircleIcon, MinusCircleIcon, PlusCircleIcon } from '@heroicons/vue/24/outline'
+import {
+  ArrowRightCircleIcon,
+  MinusCircleIcon,
+  PlusCircleIcon,
+  TagIcon,
+} from '@heroicons/vue/24/outline'
 import { uniq } from 'lodash'
 import { computed, reactive } from 'vue'
 import TextInput from '../common/TextInput.vue'
@@ -82,7 +91,7 @@ const handlerIPInputFocus = (e: Event) => {
   })
 }
 const sourceIPs = computed(() => {
-  return Object.keys(sourceIPLabelMap.value)
+  return Object.keys(sourceIPLabelMap.value).sort()
 })
 
 const newLabelForIP = reactive({
