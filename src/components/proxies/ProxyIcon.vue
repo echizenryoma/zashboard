@@ -16,7 +16,7 @@
 import { getIconFromIndexedDB, saveIconToIndexedDB } from '@/helper/utils'
 import { iconMarginRight, iconSize } from '@/store/settings'
 import DOMPurify from 'dompurify'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps<{
   icon: string
@@ -40,7 +40,12 @@ const pureDom = computed(() => {
   return DOMPurify.sanitize(props.icon.replace(DOM_STARTS_WITH, ''))
 })
 
-const cachedIcon = ref()
+const cachedIcon = ref(props.icon)
+const setCachedIcon = (icon: string) => {
+  if (cachedIcon.value !== icon) {
+    cachedIcon.value = icon
+  }
+}
 
 const fetchAndCacheIcon = async (key: string, iconUrl: string) => {
   const response = await fetch(iconUrl)
@@ -59,13 +64,13 @@ const loadIcon = async () => {
   try {
     const cachedData = await getIconFromIndexedDB(key)
     if (cachedData) {
-      cachedIcon.value = cachedData
+      setCachedIcon(cachedData)
     } else {
-      cachedIcon.value = props.icon
+      setCachedIcon(props.icon)
       await fetchAndCacheIcon(key, key)
     }
   } catch {
-    cachedIcon.value = props.icon
+    setCachedIcon(props.icon)
   }
 }
 
@@ -77,9 +82,7 @@ const initIcon = () => {
   }
 }
 
-onMounted(() => {
-  initIcon()
-})
+initIcon()
 
 watch(() => props.icon, initIcon)
 </script>
