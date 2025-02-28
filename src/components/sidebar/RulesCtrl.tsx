@@ -6,7 +6,6 @@ import { isMiddleScreen } from '@/helper/utils'
 import { fetchRules, ruleProviderList, rules, rulesFilter } from '@/store/rules'
 import { displayLatencyInRule, displayNowNodeInRule } from '@/store/settings'
 import { ArrowPathIcon, WrenchScrewdriverIcon } from '@heroicons/vue/24/outline'
-import { twMerge } from 'tailwind-merge'
 import { computed, defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import DialogWrapper from '../common/DialogWrapper.vue'
@@ -91,7 +90,7 @@ export default defineComponent({
       )
       const upgradeAll = rulesTabShow.value === RULE_TAB_TYPE.PROVIDER && (
         <button
-          class={twMerge('btn btn-sm')}
+          class="btn btn-sm"
           onClick={handlerClickUpgradeAllProviders}
         >
           {isUpgrading.value ? (
@@ -103,7 +102,7 @@ export default defineComponent({
       )
       const upgradeAllIcon = rulesTabShow.value === RULE_TAB_TYPE.PROVIDER && (
         <button
-          class={twMerge('btn btn-circle btn-sm')}
+          class="btn btn-circle btn-sm"
           onClick={handlerClickUpgradeAllProviders}
         >
           <ArrowPathIcon class={['h-4 w-4', isUpgrading.value && 'animate-spin']} />

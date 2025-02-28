@@ -18,6 +18,7 @@ import {
   minProxyCardWidth,
   proxyCardSize,
   proxySortType,
+  twoColumnProxyGroup,
 } from '@/store/settings'
 import {
   ArrowPathIcon,
@@ -26,7 +27,6 @@ import {
   ChevronUpIcon,
   WrenchScrewdriverIcon,
 } from '@heroicons/vue/24/outline'
-import { twMerge } from 'tailwind-merge'
 import { computed, defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import DialogWrapper from '../common/DialogWrapper.vue'
@@ -135,7 +135,7 @@ export default defineComponent({
       )
       const upgradeAll = proxiesTabShow.value === PROXY_TAB_TYPE.PROVIDER && (
         <button
-          class={twMerge('btn btn-sm')}
+          class="btn btn-sm"
           onClick={handlerClickUpdateAllProviders}
         >
           {isUpgrading.value ? (
@@ -147,7 +147,7 @@ export default defineComponent({
       )
       const upgradeAllIcon = proxiesTabShow.value === PROXY_TAB_TYPE.PROVIDER && (
         <button
-          class={twMerge('btn btn-circle btn-sm')}
+          class="btn btn-circle btn-sm"
           onClick={handlerClickUpdateAllProviders}
         >
           <ArrowPathIcon class={['h-4 w-4', isUpgrading.value && 'animate-spin']} />
@@ -194,7 +194,7 @@ export default defineComponent({
 
       const latencyTestAll = (
         <button
-          class={twMerge('btn btn-circle btn-sm')}
+          class="btn btn-circle btn-sm"
           onClick={handlerClickLatencyTestAll}
         >
           {isAllLatencyTesting.value ? (
@@ -207,7 +207,7 @@ export default defineComponent({
 
       const toggleCollapseAll = (
         <button
-          class={twMerge('btn btn-circle btn-sm')}
+          class={['btn btn-circle btn-sm', twoColumnProxyGroup.value && 'max-sm:hidden']}
           onClick={handlerClickToggleCollapse}
         >
           {hasNotCollapsed.value ? (
@@ -230,7 +230,7 @@ export default defineComponent({
       const settingsModal = (
         <>
           <button
-            class={twMerge('btn btn-circle btn-sm')}
+            class="btn btn-circle btn-sm"
             onClick={() => (settingsModel.value = true)}
           >
             <WrenchScrewdriverIcon class="h-4 w-4" />

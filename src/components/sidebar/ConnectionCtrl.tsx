@@ -21,7 +21,6 @@ import {
   WrenchScrewdriverIcon,
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
-import { twMerge } from 'tailwind-merge'
 import { defineComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import DialogWrapper from '../common/DialogWrapper.vue'
@@ -95,7 +94,7 @@ export default defineComponent({
       const settingsModal = (
         <>
           <button
-            class={twMerge('btn btn-circle btn-sm')}
+            class="btn btn-circle btn-sm"
             onClick={() => (settingsModel.value = true)}
           >
             <WrenchScrewdriverIcon class="h-4 w-4" />
