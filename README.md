@@ -35,11 +35,14 @@ docker run -d -p 80:80 ghcr.io/zephyruso/zashboard:latest
 
 ## URL params format
 
+#### basic example
+http://host:port/#/setup?hostname=ipordomain&port=9090&secret=123456
+
 1. **`http` / `https`**
 
    - Determines the protocol (`http` or `https`).
    - If both are present, `https` takes precedence.
-   - Default: Current page's protocol.
+   - Default: `http`
 
 2. **`hostname`**
 

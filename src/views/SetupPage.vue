@@ -208,16 +208,12 @@ const query = new URLSearchParams(
 )
 if (query.has('hostname')) {
   handleSubmit({
-    protocol: query.get('http')
-      ? 'http'
-      : query.get('https')
-        ? 'https'
-        : window.location.protocol.replace(':', ''),
-    secondaryPath: (query.get('secondaryPath') as string) || '',
+    protocol: query.get('https') ? 'https' : 'http',
+    secondaryPath: query.get('secondaryPath') || '',
     host: query.get('hostname') as string,
     port: query.get('port') as string,
-    password: query.get('secret') as string,
-    label: query.get('label') as string,
+    password: query.get('secret') || '',
+    label: query.get('label') || '',
     disableUpgradeCore:
       query.get('disableUpgradeCore') === '1' || query.get('disableUpgradeCore') === 'core',
   })

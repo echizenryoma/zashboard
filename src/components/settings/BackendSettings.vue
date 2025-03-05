@@ -2,8 +2,27 @@
   <!-- backend -->
   <div class="card">
     <div class="card-title px-4 pt-4">
-      {{ $t('backend') }}
-      <BackendVersion class="text-sm font-normal" />
+      <div class="indicator">
+        <span
+          v-if="isCoreUpdateAvailable"
+          class="indicator-item top-1 -right-1 flex"
+        >
+          <span class="bg-secondary absolute h-2 w-2 animate-ping rounded-full"></span>
+          <span class="bg-secondary h-2 w-2 rounded-full"></span>
+        </span>
+        <a
+          class="flex cursor-pointer items-center gap-2"
+          :href="
+            isSingBox
+              ? 'https://github.com/sagernet/sing-box'
+              : 'https://github.com/metacubex/mihomo'
+          "
+          target="_blank"
+        >
+          {{ $t('backend') }}
+          <BackendVersion class="text-sm font-normal" />
+        </a>
+      </div>
     </div>
     <div class="card-body gap-4">
       <BackendSwitch />
@@ -79,26 +98,13 @@
         v-if="version"
       >
         <template v-if="!isSingBox">
-          <div
-            class="indicator w-full"
+          <button
             v-if="!activeBackend?.disableUpgradeCore"
+            :class="twMerge('btn btn-primary btn-sm', isCoreUpgrading ? 'animate-pulse' : '')"
+            @click="handlerClickUpgradeCore"
           >
-            <span
-              v-if="isCoreUpdateAvailable"
-              class="indicator-item flex"
-            >
-              <span class="badge badge-xs bg-secondary absolute animate-ping"></span>
-              <span class="badge badge-xs bg-secondary"></span>
-            </span>
-            <button
-              :class="
-                twMerge('btn btn-primary btn-sm flex-1', isCoreUpgrading ? 'animate-pulse' : '')
-              "
-              @click="handlerClickUpgradeCore"
-            >
-              {{ $t('upgradeCore') }}
-            </button>
-          </div>
+            {{ $t('upgradeCore') }}
+          </button>
           <button
             :class="twMerge('btn btn-sm', isCoreRestarting ? 'animate-pulse' : '')"
             @click="handlerClickRestartCore"

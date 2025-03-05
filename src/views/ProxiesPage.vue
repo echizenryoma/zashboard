@@ -1,5 +1,8 @@
 <template>
-  <div class="max-sm:scrollbar-hidden h-full overflow-y-scroll p-2 sm:pr-1">
+  <div
+    class="max-sm:scrollbar-hidden h-full overflow-y-scroll p-2 sm:pr-1"
+    ref="proxiesRef"
+  >
     <template v-if="displayTwoColumns">
       <div class="grid grid-cols-2 gap-1">
         <div
@@ -36,15 +39,20 @@ import ProxyGroupForMobile from '@/components/proxies/ProxyGroupForMobile.vue'
 import ProxyProvider from '@/components/proxies/ProxyProvider.vue'
 import { useProxies } from '@/composables/proxies'
 import { PROXY_TAB_TYPE } from '@/constant'
-import { isSmallScreen, twoColumn, twoColumnWithSidebar } from '@/helper/utils'
 import { fetchProxies } from '@/store/proxies'
-import { isSidebarCollapsed, twoColumnProxyGroup } from '@/store/settings'
-import { computed } from 'vue'
+import { twoColumnProxyGroup } from '@/store/settings'
+import { useElementSize } from '@vueuse/core'
+import { computed, ref } from 'vue'
 
 const { proxiesTabShow, renderGroups } = useProxies()
+const proxiesRef = ref()
+const { width } = useElementSize(proxiesRef)
 
-const isLargeScreen = computed(() => {
-  return isSidebarCollapsed.value ? twoColumn.value : twoColumnWithSidebar.value
+const isSmallScreen = computed(() => {
+  return width.value < 640
+})
+const isWidthEnough = computed(() => {
+  return width.value > 720
 })
 
 const Comp = computed(() => {
@@ -57,7 +65,7 @@ const Comp = computed(() => {
 
 const displayTwoColumns = computed(() => {
   return (
-    (isLargeScreen.value ||
+    (isWidthEnough.value ||
       (isSmallScreen.value && proxiesTabShow.value === PROXY_TAB_TYPE.PROXIES)) &&
     twoColumnProxyGroup.value &&
     renderGroups.value.length > 1

@@ -5,10 +5,10 @@
       <div class="indicator">
         <span
           v-if="isUIUpdateAvailable"
-          class="indicator-item"
+          class="indicator-item top-1 -right-1 flex"
         >
-          <span class="badge badge-xs bg-secondary absolute animate-ping"></span>
-          <span class="badge badge-xs bg-secondary absolute"></span>
+          <span class="bg-secondary absolute h-2 w-2 animate-ping rounded-full"></span>
+          <span class="bg-secondary h-2 w-2 rounded-full"></span>
         </span>
         <a
           href="https://github.com/Zephyruso/zashboard"
