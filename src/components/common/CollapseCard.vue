@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { collapsedBus } from '@/composables/bus'
 import { collapseGroupMap } from '@/store/settings'
-import { computed, nextTick, onUnmounted, ref } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
 
 const props = defineProps<{
   name: string
@@ -40,9 +40,7 @@ const showCollapse = computed({
     if (value) {
       showPreview.value = false
       showContent.value = true
-      nextTick(() => {
-        collapseGroupMap.value[props.name] = true
-      })
+      collapseGroupMap.value[props.name] = true
     } else {
       collapseGroupMap.value[props.name] = false
     }
