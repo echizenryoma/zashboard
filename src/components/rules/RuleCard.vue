@@ -22,8 +22,7 @@
         >
           ({{ size }})
           <QuestionMarkCircleIcon
-            v-if="size === 0"
-            class="ml-1 h-4 w-4"
+            class="-mt-1 ml-1 inline-block h-4 w-4"
             @mouseenter="showMMDBSizeTip"
           />
         </span>
