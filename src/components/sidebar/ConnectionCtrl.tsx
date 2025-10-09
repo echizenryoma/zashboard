@@ -60,11 +60,13 @@ export default defineComponent({
 
     return () => {
       const sortForCards = (
-        <div class="flex w-full items-center gap-1 text-sm lg:w-auto">
+        <div
+          class={`flex items-center gap-1 text-sm ${props.isLargeCtrlsBar ? 'w-auto' : 'w-full'}`}
+        >
           <span class="shrink-0">{t('sortBy')}</span>
-          <div class="join flex-1 max-lg:w-0">
+          <div class={`join flex-1 ${props.isLargeCtrlsBar ? 'min-w-46' : ''}`}>
             <select
-              class="join-item select select-sm flex-1 max-lg:w-0"
+              class="join-item select select-sm flex-1"
               v-model={connectionSortType.value}
             >
               {(Object.values(SORT_TYPE) as string[]).map((opt) => (
