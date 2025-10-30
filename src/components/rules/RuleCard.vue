@@ -42,16 +42,16 @@
         >
           <ArrowPathIcon class="h-4 w-4" />
         </button>
+      </div>
+      <div class="flex min-h-6 flex-wrap items-center gap-2">
         <input
           v-if="rule.uuid"
           type="checkbox"
-          class="toggle toggle-xs ml-2"
+          class="toggle toggle-sm"
           :checked="!isDisabled"
           @change="toggleRuleDisabledHandler"
           @click.stop
         />
-      </div>
-      <div class="flex min-h-6 flex-wrap items-center gap-2">
         <ProxyName
           v-if="isCollapsed"
           :name="rule.proxy"
@@ -199,7 +199,7 @@ const showMMDBSizeTip = (e: Event) => {
 }
 
 const clickHandler = () => {
-  if (isSelectable.value) {
+  if (isSelectable.value && !props.rule.disabled) {
     isCollapsed.value = !isCollapsed.value
     selected.value = props.rule.proxy
   }

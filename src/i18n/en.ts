@@ -64,7 +64,6 @@ const en = {
   noExpire: 'No expiry',
   updated: 'Updated',
   upgradeUI: 'Upgrade dashboard',
-  updateAllProviders: 'Update all providers',
   reloadConfigs: 'Reload configs',
   mode: 'Mode',
   proxySortType: 'Proxy sort type',

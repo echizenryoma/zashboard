@@ -66,7 +66,6 @@ const zhTW: LANG_MESSAGE = {
   noExpire: '不限時',
   updated: '更新於',
   upgradeUI: '更新面板',
-  updateAllProviders: '更新所有提供商',
   reloadConfigs: '重載配置',
   mode: '模式',
   proxySortType: '代理排序方式',

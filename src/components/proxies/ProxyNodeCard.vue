@@ -35,7 +35,7 @@
       </span>
     </div>
 
-    <div class="flex h-4 w-full items-center justify-between select-none">
+    <div class="flex h-4 w-full items-center justify-between">
       <span
         :class="`truncate text-xs tracking-tight ${active ? 'text-primary-content' : 'text-base-content/60'}`"
         @mouseenter="checkTruncation"

@@ -66,7 +66,6 @@ const ru: LANG_MESSAGE = {
   noExpire: 'Нет',
   updated: 'Обновлено',
   upgradeUI: 'Обновить панель',
-  updateAllProviders: 'Обновление все провайдеры',
   reloadConfigs: 'Перезагрузить конфигурации',
   mode: 'Режим',
   proxySortType: 'Тип сортировки прокси',

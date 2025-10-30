@@ -60,7 +60,7 @@
     </RouterView>
 
     <DialogWrapper v-model="autoSwitchBackendDialog">
-      <div>
+      <div class="mb-2">
         {{ $t('currentBackendUnavailable') }}
       </div>
       <div class="flex justify-end gap-2">
