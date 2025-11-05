@@ -119,7 +119,9 @@
           </div>
         </template>
       </Draggable>
-      <LanguageSelect class="mt-4 sm:hidden" />
+      <div class="mt-4 sm:hidden">
+        <LanguageSelect />
+      </div>
       <div class="absolute top-2 right-2 sm:hidden">
         <ImportSettings />
       </div>

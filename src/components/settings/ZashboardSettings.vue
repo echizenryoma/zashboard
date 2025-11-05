@@ -1,7 +1,7 @@
 <template>
   <!-- dashboard -->
-  <div class="card">
-    <div class="card-title px-4 pt-4">
+  <div class="relative flex flex-col gap-2 p-4 text-sm">
+    <div class="settings-title">
       <div class="indicator">
         <span
           v-if="isUIUpdateAvailable"
@@ -35,153 +35,170 @@
         <ArrowPathIcon class="h-4 w-4" />
       </button>
     </div>
-    <div class="card-body gap-4">
-      <div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
-        <LanguageSelect />
-        <div class="flex items-center gap-2">
-          {{ $t('autoSwitchTheme') }}
-          <input
-            type="checkbox"
-            v-model="autoTheme"
-            class="toggle"
-          />
-        </div>
-        <div class="flex items-center gap-2">
-          {{ $t('defaultTheme') }}
-          <div class="join">
-            <ThemeSelector v-model:value="defaultTheme" />
-            <button
-              class="btn btn-sm join-item"
-              @click="customThemeModal = !customThemeModal"
-            >
-              <PlusIcon class="h-4 w-4" />
-            </button>
-          </div>
-          <CustomTheme v-model:value="customThemeModal" />
-        </div>
-        <div
-          class="flex items-center gap-2"
-          v-if="autoTheme"
-        >
-          {{ $t('darkTheme') }}
-          <ThemeSelector v-model:value="darkTheme" />
-        </div>
-        <div class="flex items-center gap-2">
+    <div class="settings-grid">
+      <LanguageSelect />
+      <div class="setting-item">
+        <div class="setting-item-label">
           {{ $t('fonts') }}
-          <select
-            class="select select-sm w-48"
-            v-model="font"
-          >
-            <option
-              v-for="opt in fontOptions"
-              :key="opt"
-              :value="opt"
-            >
-              {{ opt }}
-            </option>
-          </select>
         </div>
-        <div class="flex items-center gap-2">
-          Emoji
-          <select
-            class="select select-sm w-48"
-            v-model="emoji"
+        <select
+          class="select select-sm w-48"
+          v-model="font"
+        >
+          <option
+            v-for="opt in fontOptions"
+            :key="opt"
+            :value="opt"
           >
-            <option
-              v-for="opt in Object.values(EMOJIS)"
-              :key="opt"
-              :value="opt"
-            >
-              {{ opt }}
-            </option>
-          </select>
+            {{ opt }}
+          </option>
+        </select>
+      </div>
+      <div class="setting-item">
+        <div class="setting-item-label">Emoji</div>
+        <select
+          class="select select-sm w-48"
+          v-model="emoji"
+        >
+          <option
+            v-for="opt in Object.values(EMOJIS)"
+            :key="opt"
+            :value="opt"
+          >
+            {{ opt }}
+          </option>
+        </select>
+      </div>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('customBackgroundURL') }}
         </div>
-        <div class="flex items-center gap-2">
-          <span class="shrink-0"> {{ $t('customBackgroundURL') }} </span>
-          <div class="join">
-            <TextInput
-              class="join-item w-48"
-              v-model="customBackgroundURL"
-              :clearable="true"
-              @update:modelValue="handlerBackgroundURLChange"
-            />
-            <button
-              class="btn join-item btn-sm"
-              @click="handlerClickUpload"
-            >
-              <ArrowUpTrayIcon class="h-4 w-4" />
-            </button>
-          </div>
+        <div class="join">
+          <TextInput
+            class="join-item w-38"
+            v-model="customBackgroundURL"
+            :clearable="true"
+            @update:modelValue="handlerBackgroundURLChange"
+          />
           <button
-            class="btn btn-circle join-item btn-sm"
-            v-if="customBackgroundURL"
-            @click="displayBgProperty = !displayBgProperty"
+            class="btn join-item btn-sm"
+            @click="handlerClickUpload"
           >
-            <AdjustmentsHorizontalIcon class="h-4 w-4" />
+            <ArrowUpTrayIcon class="h-4 w-4" />
           </button>
-          <input
-            ref="inputFileRef"
-            type="file"
-            accept="image/*"
-            class="hidden"
-            @change="handlerFileChange"
-          />
         </div>
-        <template v-if="customBackgroundURL && displayBgProperty">
-          <div class="flex items-center gap-2">
+        <button
+          class="btn btn-circle join-item btn-sm"
+          v-if="customBackgroundURL"
+          @click="displayBgProperty = !displayBgProperty"
+        >
+          <AdjustmentsHorizontalIcon class="h-4 w-4" />
+        </button>
+        <input
+          ref="inputFileRef"
+          type="file"
+          accept="image/*"
+          class="hidden"
+          @change="handlerFileChange"
+        />
+      </div>
+      <template v-if="customBackgroundURL && displayBgProperty">
+        <div class="setting-item">
+          <div class="setting-item-label">
             {{ $t('transparent') }}
-            <input
-              type="range"
-              min="0"
-              max="100"
-              v-model="dashboardTransparent"
-              class="range max-w-64"
-              @touchstart.passive.stop
-              @touchmove.passive.stop
-              @touchend.passive.stop
-            />
           </div>
-
-          <div class="flex items-center gap-2">
-            {{ $t('blurIntensity') }}
-            <input
-              type="range"
-              min="0"
-              max="40"
-              v-model="blurIntensity"
-              class="range max-w-64"
-              @touchstart.stop
-              @touchmove.stop
-              @touchend.stop
-            />
-          </div>
-        </template>
-        <div class="flex items-center gap-2">
-          {{ $t('autoUpgrade') }}
           <input
-            class="toggle"
-            type="checkbox"
-            v-model="autoUpgrade"
+            type="range"
+            min="0"
+            max="100"
+            v-model="dashboardTransparent"
+            class="range max-w-64"
+            @touchstart.passive.stop
+            @touchmove.passive.stop
+            @touchend.passive.stop
           />
         </div>
-      </div>
-      <div class="grid max-w-3xl grid-cols-2 gap-2 sm:grid-cols-4">
-        <button
-          :class="twMerge('btn btn-primary btn-sm', isUIUpgrading ? 'animate-pulse' : '')"
-          @click="handlerClickUpgradeUI"
-        >
-          {{ $t('upgradeUI') }}
-        </button>
-        <div class="sm:hidden"></div>
 
-        <button
-          class="btn btn-sm"
-          @click="exportSettings"
-        >
-          {{ $t('exportSettings') }}
-        </button>
-        <ImportSettings />
+        <div class="setting-item">
+          <div class="setting-item-label">
+            {{ $t('blurIntensity') }}
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="40"
+            v-model="blurIntensity"
+            class="range max-w-64"
+            @touchstart.stop
+            @touchmove.stop
+            @touchend.stop
+          />
+        </div>
+      </template>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('defaultTheme') }}
+        </div>
+        <div class="join">
+          <ThemeSelector
+            class="w-38!"
+            v-model:value="defaultTheme"
+          />
+          <button
+            class="btn btn-sm join-item"
+            @click="customThemeModal = !customThemeModal"
+          >
+            <PlusIcon class="h-4 w-4" />
+          </button>
+        </div>
+        <CustomTheme v-model:value="customThemeModal" />
       </div>
+      <div
+        class="setting-item"
+        v-if="autoTheme"
+      >
+        <div class="setting-item-label">
+          {{ $t('darkTheme') }}
+        </div>
+        <ThemeSelector v-model:value="darkTheme" />
+      </div>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('autoSwitchTheme') }}
+        </div>
+        <input
+          type="checkbox"
+          v-model="autoTheme"
+          class="toggle"
+        />
+      </div>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('autoUpgrade') }}
+        </div>
+        <input
+          class="toggle"
+          type="checkbox"
+          v-model="autoUpgrade"
+        />
+      </div>
+    </div>
+    <div class="mt-4 grid max-w-3xl grid-cols-2 gap-2 md:grid-cols-4">
+      <button
+        :class="twMerge('btn btn-primary btn-sm', isUIUpgrading ? 'animate-pulse' : '')"
+        @click="handlerClickUpgradeUI"
+      >
+        {{ $t('upgradeUI') }}
+      </button>
+      <div class="sm:hidden"></div>
+
+      <button
+        class="btn btn-sm"
+        @click="exportSettings"
+      >
+        {{ $t('exportSettings') }}
+      </button>
+      <ImportSettings />
     </div>
   </div>
 </template>

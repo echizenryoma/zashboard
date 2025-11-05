@@ -254,6 +254,14 @@ const zhTW: LANG_MESSAGE = {
   proxyChainExit: '代理鏈出口',
   nodeType: '節點類型',
   connectionCount: '連接數',
+  zashboardSettings: '面板設置',
+  backendSettings: '後端設置',
+  generalSettings: '常規設置',
+  overviewCard: '概覽卡片',
+  overviewSettings: '概覽設置',
+  latency: '延遲',
+  proxyStyle: '代理樣式',
+  icon: '圖示',
 }
 
 export default zhTW

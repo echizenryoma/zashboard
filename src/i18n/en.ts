@@ -255,6 +255,14 @@ const en = {
   proxyChainExit: 'Proxy chain exit',
   nodeType: 'Node type',
   connectionCount: 'Connection count',
+  zashboardSettings: 'Dashboard Settings',
+  backendSettings: 'Backend Settings',
+  generalSettings: 'General Settings',
+  overviewCard: 'Overview Card',
+  overviewSettings: 'Overview Settings',
+  latency: 'Latency',
+  proxyStyle: 'Proxy style',
+  icon: 'Icon',
 }
 
 export type LANG_MESSAGE = typeof en

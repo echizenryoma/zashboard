@@ -1,182 +1,216 @@
 <template>
-  <div class="card">
-    <div class="card-title px-4 pt-4">
-      {{ $t('proxies') }}
+  <div class="flex flex-col gap-2 p-4 text-sm">
+    <div class="settings-title">
+      {{ $t('latency') }}
     </div>
-    <div class="card-body">
-      <div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
-        <div class="flex w-full items-center gap-2">
-          <span> {{ $t('speedtestUrl') }} </span>
-          <TextInput
-            class="w-36 flex-1 sm:max-w-80"
-            v-model="speedtestUrl"
-            :clearable="true"
-          />
+    <div class="settings-grid">
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('speedtestUrl') }}
         </div>
-        <div class="flex w-full items-center gap-2">
-          <span> {{ $t('speedtestTimeout') }} </span>
-          <input
-            type="number"
-            class="input input-sm w-20"
-            v-model="speedtestTimeout"
-          />
-          ms
+        <TextInput
+          class="flex-2"
+          v-model="speedtestUrl"
+          :clearable="true"
+        />
+      </div>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('speedtestTimeout') }}
         </div>
-        <div class="flex items-center gap-2">
-          <span> {{ $t('lowLatencyDesc') }} </span>
-          <input
-            type="number"
-            class="input input-sm w-20"
-            v-model="lowLatency"
-          />
-          ms
+        <input
+          type="number"
+          class="input input-sm w-20"
+          v-model="speedtestTimeout"
+        />
+        ms
+      </div>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('lowLatencyDesc') }}
         </div>
-        <div class="flex items-center gap-2">
-          <span> {{ $t('mediumLatencyDesc') }} </span>
-          <input
-            type="number"
-            class="input input-sm w-20"
-            v-model="mediumLatency"
-          />
-          ms
+        <input
+          type="number"
+          class="input input-sm w-20"
+          v-model="lowLatency"
+        />
+        ms
+      </div>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('mediumLatencyDesc') }}
         </div>
-        <div class="flex items-center gap-2">
+        <input
+          type="number"
+          class="input input-sm w-20"
+          v-model="mediumLatency"
+        />
+        ms
+      </div>
+      <div class="setting-item">
+        <div class="setting-item-label">
           {{ $t('ipv6Test') }}
-          <input
-            class="toggle"
-            type="checkbox"
-            v-model="IPv6test"
-          />
         </div>
-        <div class="flex w-full items-center gap-2">
-          <span> {{ $t('independentLatencyTest') }} </span>
-          <input
-            class="toggle"
-            type="checkbox"
-            v-model="independentLatencyTest"
-          />
-          <QuestionMarkCircleIcon
-            class="h-4 w-4"
-            @mouseenter="independentLatencyTestTip"
-          />
-        </div>
-        <div
-          v-if="independentLatencyTest"
-          class="col-span-full"
-        >
-          <GroupTestUrlsSettings />
-        </div>
+        <input
+          class="toggle"
+          type="checkbox"
+          v-model="IPv6test"
+        />
       </div>
-      <div class="divider"></div>
-      <div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
-        <div class="flex items-center gap-2">
-          {{ $t('twoColumnProxyGroup') }}
-          <input
-            class="toggle"
-            type="checkbox"
-            v-model="twoColumnProxyGroup"
-          />
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('independentLatencyTest') }}
         </div>
-        <div class="flex items-center gap-2">
-          {{ $t('proxyPreviewType') }}
-          <select
-            class="select select-sm min-w-24"
-            v-model="proxyPreviewType"
-          >
-            <option
-              v-for="opt in Object.values(PROXY_PREVIEW_TYPE)"
-              :key="opt"
-              :value="opt"
-            >
-              {{ $t(opt) }}
-            </option>
-          </select>
-        </div>
-        <div class="flex items-center gap-2">
-          {{ $t('proxyCountMode') }}
-          <select
-            class="select select-sm min-w-24"
-            v-model="proxyCountMode"
-          >
-            <option
-              v-for="opt in Object.values(PROXY_COUNT_MODE)"
-              :key="opt"
-              :value="opt"
-            >
-              {{ $t(opt) }}
-            </option>
-          </select>
-        </div>
-        <div class="flex items-center gap-2">
-          {{ $t('proxyCardSize') }}
-          <select
-            class="select select-sm min-w-24"
-            v-model="proxyCardSize"
-            @change="handlerProxyCardSizeChange"
-          >
-            <option
-              v-for="opt in Object.values(PROXY_CARD_SIZE)"
-              :key="opt"
-              :value="opt"
-            >
-              {{ $t(opt) }}
-            </option>
-          </select>
-        </div>
-        <div class="flex items-center gap-2">
-          {{ $t('displayGlobalByMode') }}
-          <input
-            class="toggle"
-            type="checkbox"
-            v-model="displayGlobalByMode"
-          />
-        </div>
-        <div
-          class="flex items-center gap-2"
-          v-if="displayGlobalByMode && isSingBox"
-        >
-          {{ $t('customGlobalNode') }}
-          <select
-            class="select select-sm min-w-24"
-            v-model="customGlobalNode"
-          >
-            <option
-              v-for="opt in Object.keys(proxyMap)"
-              :key="opt"
-              :value="opt"
-            >
-              {{ opt }}
-            </option>
-          </select>
-        </div>
-        <div class="flex items-center gap-2">
-          {{ $t('truncateProxyName') }}
-          <input
-            class="toggle"
-            type="checkbox"
-            v-model="truncateProxyName"
-          />
-        </div>
-        <div class="flex items-center gap-2">
-          {{ $t('proxyGroupIconSize') }}
-          <input
-            type="number"
-            class="input input-sm w-20"
-            v-model="proxyGroupIconSize"
-          />
-        </div>
-        <div class="flex items-center gap-2">
-          {{ $t('proxyGroupIconMargin') }}
-          <input
-            type="number"
-            class="input input-sm w-20"
-            v-model="proxyGroupIconMargin"
-          />
-        </div>
+        <input
+          class="toggle"
+          type="checkbox"
+          v-model="independentLatencyTest"
+        />
+        <QuestionMarkCircleIcon
+          class="h-4 w-4"
+          @mouseenter="independentLatencyTestTip"
+        />
       </div>
-      <div class="divider"></div>
-      <IconSettings />
+      <div
+        v-if="independentLatencyTest"
+        class="col-span-full"
+      >
+        <GroupTestUrlsSettings />
+      </div>
     </div>
+    <div class="divider my-4"></div>
+    <div class="settings-title">
+      {{ $t('proxyStyle') }}
+    </div>
+    <div class="settings-grid">
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('twoColumnProxyGroup') }}
+        </div>
+        <input
+          class="toggle"
+          type="checkbox"
+          v-model="twoColumnProxyGroup"
+        />
+      </div>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('proxyPreviewType') }}
+        </div>
+        <select
+          class="select select-sm min-w-24"
+          v-model="proxyPreviewType"
+        >
+          <option
+            v-for="opt in Object.values(PROXY_PREVIEW_TYPE)"
+            :key="opt"
+            :value="opt"
+          >
+            {{ $t(opt) }}
+          </option>
+        </select>
+      </div>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('proxyCountMode') }}
+        </div>
+        <select
+          class="select select-sm min-w-24"
+          v-model="proxyCountMode"
+        >
+          <option
+            v-for="opt in Object.values(PROXY_COUNT_MODE)"
+            :key="opt"
+            :value="opt"
+          >
+            {{ $t(opt) }}
+          </option>
+        </select>
+      </div>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('proxyCardSize') }}
+        </div>
+        <select
+          class="select select-sm min-w-24"
+          v-model="proxyCardSize"
+          @change="handlerProxyCardSizeChange"
+        >
+          <option
+            v-for="opt in Object.values(PROXY_CARD_SIZE)"
+            :key="opt"
+            :value="opt"
+          >
+            {{ $t(opt) }}
+          </option>
+        </select>
+      </div>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('displayGlobalByMode') }}
+        </div>
+        <input
+          class="toggle"
+          type="checkbox"
+          v-model="displayGlobalByMode"
+        />
+      </div>
+      <div
+        class="setting-item"
+        v-if="displayGlobalByMode && isSingBox"
+      >
+        <div class="setting-item-label">
+          {{ $t('customGlobalNode') }}
+        </div>
+        <select
+          class="select select-sm min-w-24"
+          v-model="customGlobalNode"
+        >
+          <option
+            v-for="opt in Object.keys(proxyMap)"
+            :key="opt"
+            :value="opt"
+          >
+            {{ opt }}
+          </option>
+        </select>
+      </div>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('truncateProxyName') }}
+        </div>
+        <input
+          class="toggle"
+          type="checkbox"
+          v-model="truncateProxyName"
+        />
+      </div>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('proxyGroupIconSize') }}
+        </div>
+        <input
+          type="number"
+          class="input input-sm w-20"
+          v-model="proxyGroupIconSize"
+        />
+      </div>
+      <div class="setting-item">
+        <div class="setting-item-label">
+          {{ $t('proxyGroupIconMargin') }}
+        </div>
+        <input
+          type="number"
+          class="input input-sm w-20"
+          v-model="proxyGroupIconMargin"
+        />
+      </div>
+    </div>
+    <div class="divider my-4"></div>
+    <div class="settings-title">
+      {{ $t('icon') }}
+    </div>
+    <IconSettings />
   </div>
 </template>
 

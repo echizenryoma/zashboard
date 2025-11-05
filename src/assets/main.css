@@ -323,3 +323,16 @@ div {
     width: 0%;
   }
 }
+
+.settings-title {
+  @apply flex items-center gap-2 py-2 text-lg font-bold;
+}
+.settings-grid {
+  @apply grid grid-cols-1 gap-2 xl:grid-cols-2;
+}
+.setting-item {
+  @apply border-base-300 mr-4 flex items-center gap-2 border-b pt-1 pb-2;
+  .setting-item-label {
+    @apply flex-1 text-sm font-medium;
+  }
+}

@@ -257,6 +257,14 @@ const ru: LANG_MESSAGE = {
   proxyChainExit: 'Выход из цепочки прокси',
   nodeType: 'Тип узла',
   connectionCount: 'Количество соединений',
+  zashboardSettings: 'Настройки панели',
+  backendSettings: 'Настройки бэкенда',
+  generalSettings: 'Общие настройки',
+  overviewCard: 'Карточка обзора',
+  overviewSettings: 'Настройки обзора',
+  latency: 'Задержка',
+  proxyStyle: 'Стиль прокси',
+  icon: 'Иконка',
 }
 
 export default ru

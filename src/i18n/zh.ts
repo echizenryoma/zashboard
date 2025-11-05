@@ -254,6 +254,14 @@ const zh: LANG_MESSAGE = {
   proxyChainExit: '代理链出口',
   nodeType: '节点类型',
   connectionCount: '连接数',
+  zashboardSettings: '面板设置',
+  backendSettings: '后端设置',
+  generalSettings: '常规设置',
+  overviewCard: '概览卡片',
+  overviewSettings: '概览设置',
+  latency: '延迟',
+  proxyStyle: '代理样式',
+  icon: '图标',
 }
 
 export default zh

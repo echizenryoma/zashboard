@@ -1,7 +1,7 @@
 <template>
   <!-- backend -->
-  <div class="card">
-    <div class="card-title px-4 pt-4">
+  <div class="flex flex-col gap-2 p-4 text-sm">
+    <div class="settings-title">
       <div class="indicator">
         <span
           v-if="isCoreUpdateAvailable"
@@ -24,145 +24,155 @@
         </a>
       </div>
     </div>
-    <div class="card-body gap-4">
-      <BackendSwitch />
+    <BackendSwitch />
 
-      <template v-if="!isSingBox && configs">
-        <div class="divider"></div>
-        <div class="grid max-w-3xl grid-cols-2 gap-2 lg:grid-cols-3">
-          <div
-            class="flex items-center gap-2"
-            v-for="portConfig in portList"
-            :key="portConfig.key"
-          >
-            <span class="shrink-0"> {{ $t(portConfig.label) }} </span>
-            <input
-              class="input input-sm w-20 sm:w-24"
-              type="number"
-              v-model="configs[portConfig.key as keyof Config]"
-              @change="
-                updateConfigs({ [portConfig.key]: Number(configs[portConfig.key as keyof Config]) })
-              "
-            />
-          </div>
-        </div>
-        <div class="grid max-w-3xl grid-cols-2 gap-2 lg:grid-cols-4">
-          <div
-            class="flex items-center gap-2"
-            v-if="configs?.tun"
-          >
-            {{ $t('tunMode') }}
-            <input
-              class="toggle"
-              type="checkbox"
-              v-model="configs.tun.enable"
-              @change="hanlderTunModeChange"
-            />
-          </div>
-          <div class="flex items-center gap-2">
-            {{ $t('allowLan') }}
-            <input
-              class="toggle"
-              type="checkbox"
-              v-model="configs['allow-lan']"
-              @change="handlerAllowLanChange"
-            />
-          </div>
-          <template v-if="!activeBackend?.disableUpgradeCore">
-            <div class="flex items-center gap-2">
-              {{ $t('checkUpgrade') }}
-              <input
-                class="toggle"
-                type="checkbox"
-                v-model="checkUpgradeCore"
-                @change="handlerCheckUpgradeCoreChange"
-              />
-            </div>
-            <div
-              class="flex items-center gap-2"
-              v-if="checkUpgradeCore"
-            >
-              {{ $t('autoUpgrade') }}
-              <input
-                class="toggle"
-                type="checkbox"
-                v-model="autoUpgradeCore"
-              />
-            </div>
-          </template>
-        </div>
-      </template>
-
-      <div
-        class="grid max-w-3xl grid-cols-2 gap-2"
-        :class="
-          hasSmartGroup
-            ? 'md:grid-cols-4 xl:max-w-6xl xl:grid-cols-7'
-            : 'md:grid-cols-3 xl:max-w-6xl xl:grid-cols-6'
-        "
-      >
-        <template v-if="!isSingBox || displayAllFeatures">
-          <button
-            v-if="!activeBackend?.disableUpgradeCore"
-            class="btn btn-primary btn-sm"
-            @click="showUpgradeCoreModal = true"
-          >
-            {{ $t('upgradeCore') }}
-          </button>
-          <button
-            class="btn btn-sm"
-            @click="handlerClickRestartCore"
-          >
-            <span
-              v-if="isCoreRestarting"
-              class="loading loading-spinner loading-md"
-            ></span>
-            {{ $t('restartCore') }}
-          </button>
-          <button
-            class="btn btn-sm"
-            @click="handlerClickReloadConfigs"
-          >
-            <span
-              v-if="isConfigReloading"
-              class="loading loading-spinner loading-md"
-            ></span>
-            {{ $t('reloadConfigs') }}
-          </button>
-          <button
-            class="btn btn-sm"
-            @click="handlerClickUpdateGeo"
-          >
-            <span
-              v-if="isGeoUpdating"
-              class="loading loading-spinner loading-md"
-            ></span>
-            {{ $t('updateGeoDatabase') }}
-          </button>
-        </template>
-        <button
-          class="btn btn-sm"
-          @click="handleFlushDNSCache"
-        >
-          {{ $t('flushDNSCache') }}
-        </button>
-        <button
-          class="btn btn-sm"
-          @click="handleFlushFakeIP"
-        >
-          {{ $t('flushFakeIP') }}
-        </button>
-        <button
-          v-if="hasSmartGroup"
-          class="btn btn-sm"
-          @click="flushSmartGroupWeightsAPI"
-        >
-          {{ $t('flushSmartWeights') }}
-        </button>
-      </div>
+    <template v-if="!isSingBox && configs">
       <div class="divider"></div>
-      <DnsQuery />
+      <div class="grid max-w-3xl grid-cols-1 gap-2 lg:grid-cols-3">
+        <div
+          class="setting-item"
+          v-for="portConfig in portList"
+          :key="portConfig.key"
+        >
+          <div class="setting-item-label">
+            {{ $t(portConfig.label) }}
+          </div>
+          <input
+            class="input input-sm w-20 sm:w-24"
+            type="number"
+            v-model="configs[portConfig.key as keyof Config]"
+            @change="
+              updateConfigs({ [portConfig.key]: Number(configs[portConfig.key as keyof Config]) })
+            "
+          />
+        </div>
+      </div>
+      <div class="grid max-w-3xl grid-cols-1 gap-2 lg:grid-cols-4">
+        <div
+          class="setting-item"
+          v-if="configs?.tun"
+        >
+          <div class="setting-item-label">
+            {{ $t('tunMode') }}
+          </div>
+          <input
+            class="toggle"
+            type="checkbox"
+            v-model="configs.tun.enable"
+            @change="hanlderTunModeChange"
+          />
+        </div>
+        <div class="setting-item">
+          <div class="setting-item-label">
+            {{ $t('allowLan') }}
+          </div>
+          <input
+            class="toggle"
+            type="checkbox"
+            v-model="configs['allow-lan']"
+            @change="handlerAllowLanChange"
+          />
+        </div>
+        <template v-if="!activeBackend?.disableUpgradeCore">
+          <div class="setting-item">
+            <div class="setting-item-label">
+              {{ $t('checkUpgrade') }}
+            </div>
+            <input
+              class="toggle"
+              type="checkbox"
+              v-model="checkUpgradeCore"
+              @change="handlerCheckUpgradeCoreChange"
+            />
+          </div>
+          <div
+            class="setting-item"
+            v-if="checkUpgradeCore"
+          >
+            <div class="setting-item-label">
+              {{ $t('autoUpgrade') }}
+            </div>
+            <input
+              class="toggle"
+              type="checkbox"
+              v-model="autoUpgradeCore"
+            />
+          </div>
+        </template>
+      </div>
+    </template>
+
+    <div class="divider"></div>
+
+    <div
+      class="grid max-w-3xl grid-cols-2 gap-2"
+      :class="
+        hasSmartGroup
+          ? 'md:grid-cols-4 xl:max-w-6xl xl:grid-cols-7'
+          : 'md:grid-cols-3 xl:max-w-6xl xl:grid-cols-6'
+      "
+    >
+      <template v-if="!isSingBox || displayAllFeatures">
+        <button
+          v-if="!activeBackend?.disableUpgradeCore"
+          class="btn btn-primary btn-sm"
+          @click="showUpgradeCoreModal = true"
+        >
+          {{ $t('upgradeCore') }}
+        </button>
+        <button
+          class="btn btn-sm"
+          @click="handlerClickRestartCore"
+        >
+          <span
+            v-if="isCoreRestarting"
+            class="loading loading-spinner loading-md"
+          ></span>
+          {{ $t('restartCore') }}
+        </button>
+        <button
+          class="btn btn-sm"
+          @click="handlerClickReloadConfigs"
+        >
+          <span
+            v-if="isConfigReloading"
+            class="loading loading-spinner loading-md"
+          ></span>
+          {{ $t('reloadConfigs') }}
+        </button>
+        <button
+          class="btn btn-sm"
+          @click="handlerClickUpdateGeo"
+        >
+          <span
+            v-if="isGeoUpdating"
+            class="loading loading-spinner loading-md"
+          ></span>
+          {{ $t('updateGeoDatabase') }}
+        </button>
+      </template>
+      <button
+        class="btn btn-sm"
+        @click="handleFlushDNSCache"
+      >
+        {{ $t('flushDNSCache') }}
+      </button>
+      <button
+        class="btn btn-sm"
+        @click="handleFlushFakeIP"
+      >
+        {{ $t('flushFakeIP') }}
+      </button>
+      <button
+        v-if="hasSmartGroup"
+        class="btn btn-sm"
+        @click="flushSmartGroupWeightsAPI"
+      >
+        {{ $t('flushSmartWeights') }}
+      </button>
     </div>
+    <div class="divider"></div>
+    <DnsQuery />
     <UpgradeCoreModal v-model="showUpgradeCoreModal" />
   </div>
 </template>
