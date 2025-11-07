@@ -24,7 +24,7 @@
 
         <div
           v-if="ctrlsMap[route.name as string]"
-          class="bg-base-100/20 ctrls-bar absolute top-2 right-2 left-2 z-30 rounded-xl shadow-sm backdrop-blur-sm md:right-3 md:rounded-lg"
+          class="glass-panel ctrls-bar top-2"
           ref="ctrlsBarRef"
         >
           <component
@@ -35,7 +35,7 @@
 
         <template v-if="isMiddleScreen">
           <div
-            class="dock dock-sm bg-base-200/20 absolute right-2 left-2 z-30 h-16 w-auto rounded-3xl shadow-sm backdrop-blur-sm"
+            class="glass-panel dock dock-sm h-14 w-auto"
             :style="{
               padding: '0',
               bottom: 'calc(var(--spacing) * 2 + env(safe-area-inset-bottom))',

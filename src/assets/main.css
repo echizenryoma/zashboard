@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 @config '../../tailwind.config.ts';
-@plugin "daisyui" {
+@plugin 'daisyui' {
   themes: all;
   exclude: rootscrollgutter;
 }
@@ -323,6 +323,10 @@ div {
   to {
     width: 0%;
   }
+}
+
+.glass-panel {
+  @apply bg-base-100/20 absolute right-2 left-2 z-30 rounded-xl shadow-sm backdrop-blur-sm md:rounded-lg;
 }
 
 .settings-title {

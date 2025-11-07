@@ -1,7 +1,7 @@
 <template>
   <div
     ref="menuRef"
-    class="settings-menu scrollbar-hidden bg-base-100/20 absolute top-2 right-2 left-2 z-30 rounded-xl p-1 px-2 shadow-sm backdrop-blur-sm md:rounded-lg"
+    class="settings-menu glass-panel scrollbar-hidden top-2 p-1 px-2"
     @touchstart.passive.stop
     @touchmove.passive.stop
     @touchend.passive.stop
