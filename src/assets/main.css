@@ -327,11 +327,12 @@ div {
 }
 
 .glass-panel {
-  @apply bg-base-100/20 shadow-sm backdrop-blur-sm;
+  @apply bg-base-100/20 shadow-sm backdrop-blur-md;
 }
 .ctrls-bar {
-  @apply absolute top-0 right-0 left-0 z-30;
+  @apply fixed top-0 right-0 left-0 z-30 md:sticky;
 }
+
 .dock {
   @apply absolute right-2 left-2 z-30 rounded-3xl;
 }

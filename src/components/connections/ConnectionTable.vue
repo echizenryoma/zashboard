@@ -253,9 +253,7 @@ import { twMerge } from 'tailwind-merge'
 import { computed, h, ref, type VNode } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ProxyName from '../proxies/ProxyName.vue'
-
 const { handlerInfo } = useConnections()
-
 const columnWidthMap = useStorage('config/table-column-width', {
   [CONNECTIONS_TABLE_ACCESSOR_KEY.Close]: 50,
   [CONNECTIONS_TABLE_ACCESSOR_KEY.Host]: 320,

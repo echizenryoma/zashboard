@@ -1,4 +1,5 @@
 import { disconnectAllAPI, disconnectByIdAPI } from '@/api'
+import { useCtrlsBar } from '@/composables/useCtrlsBar'
 import { ROUTE_NAME, SETTINGS_MENU_KEY, SORT_DIRECTION, SORT_TYPE } from '@/constant'
 import { useTooltip } from '@/helper/tooltip'
 import {
@@ -48,25 +49,20 @@ export default defineComponent({
     ConnectionTabs,
     SourceIPFilter,
   },
-  props: {
-    isLargeCtrlsBar: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  setup(props) {
+  setup() {
     const { t } = useI18n()
     const router = useRouter()
     const settingsModel = ref(false)
     const { showTip } = useTooltip()
+    const { isLargeCtrlsBar } = useCtrlsBar(useConnectionCard.value ? 860 : 720)
 
     return () => {
       const sortForCards = (
         <div
-          class={`flex items-center gap-1 text-sm ${props.isLargeCtrlsBar ? 'w-auto' : 'w-full'}`}
+          class={`flex items-center gap-1 text-sm ${isLargeCtrlsBar.value ? 'w-auto' : 'w-full'}`}
         >
           <span class="shrink-0">{t('sortBy')}</span>
-          <div class={`join flex-1 ${props.isLargeCtrlsBar ? 'min-w-46' : ''}`}>
+          <div class={`join flex-1 ${isLargeCtrlsBar.value ? 'min-w-46' : ''}`}>
             <select
               class="join-item select select-sm flex-1"
               v-model={connectionSortType.value}
@@ -161,7 +157,7 @@ export default defineComponent({
           placeholder={`${t('search')} | ${t('searchMultiple')}`}
           clearable={true}
           before-close={true}
-          class={props.isLargeCtrlsBar ? 'w-32 max-w-80 flex-1' : 'w-full'}
+          class={isLargeCtrlsBar.value ? 'w-32 max-w-80 flex-1' : 'w-full'}
         />
       )
 
@@ -184,33 +180,30 @@ export default defineComponent({
         </>
       )
 
-      if (!props.isLargeCtrlsBar) {
-        return (
-          <div class="flex flex-wrap items-center gap-2 p-2">
-            <div class="flex w-full items-center justify-between gap-2">
-              <ConnectionTabs />
-              {!useConnectionCard.value && (
-                <div class="flex items-center gap-1">
-                  {settingsModal}
-                  {buttons}
-                </div>
-              )}
-            </div>
-            {useConnectionCard.value && (
-              <div class="flex w-full items-center gap-2">
-                {sortForCards}
+      const content = !isLargeCtrlsBar.value ? (
+        <div class="flex flex-wrap items-center gap-2 p-2">
+          <div class="flex w-full items-center justify-between gap-2">
+            <ConnectionTabs />
+            {!useConnectionCard.value && (
+              <div class="flex items-center gap-1">
                 {settingsModal}
                 {buttons}
               </div>
             )}
-            <div class="join w-full">
-              <SourceIPFilter class="w-40" />
-              {searchInput}
-            </div>
           </div>
-        )
-      }
-      return (
+          {useConnectionCard.value && (
+            <div class="flex w-full items-center gap-2">
+              {sortForCards}
+              {settingsModal}
+              {buttons}
+            </div>
+          )}
+          <div class="join w-full">
+            <SourceIPFilter class="w-40" />
+            {searchInput}
+          </div>
+        </div>
+      ) : (
         <div class="flex items-center gap-2 p-2">
           <ConnectionTabs />
           {useConnectionCard.value && sortForCards}
@@ -220,6 +213,8 @@ export default defineComponent({
           {buttons}
         </div>
       )
+
+      return <div class="glass-panel ctrls-bar">{content}</div>
     }
   },
 })

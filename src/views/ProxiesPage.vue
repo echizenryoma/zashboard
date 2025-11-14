@@ -1,13 +1,14 @@
 <template>
   <div
-    class="max-md:scrollbar-hidden h-full p-2 md:pr-1"
-    :style="padding"
+    class="max-md:scrollbar-hidden h-full"
     :class="disableProxiesPageScroll ? 'overflow-y-hidden' : 'overflow-y-scroll'"
+    :style="padding"
     ref="proxiesRef"
     @scroll.passive="handleScroll"
   >
+    <ProxiesCtrl />
     <template v-if="displayTwoColumns">
-      <div class="grid grid-cols-2 gap-1">
+      <div class="grid grid-cols-2 gap-1 p-2 md:pr-1">
         <div
           v-for="idx in [0, 1]"
           :key="idx"
@@ -23,7 +24,7 @@
       </div>
     </template>
     <div
-      class="grid grid-cols-1 gap-1"
+      class="grid grid-cols-1 gap-1 p-2 md:pr-1"
       v-else
     >
       <component
@@ -40,6 +41,7 @@
 import ProxyGroup from '@/components/proxies/ProxyGroup.vue'
 import ProxyGroupForMobile from '@/components/proxies/ProxyGroupForMobile.vue'
 import ProxyProvider from '@/components/proxies/ProxyProvider.vue'
+import ProxiesCtrl from '@/components/sidebar/ProxiesCtrl.tsx'
 import { usePaddingForViews } from '@/composables/paddingViews'
 import { disableProxiesPageScroll, isProxiesPageMounted, renderGroups } from '@/composables/proxies'
 import { PROXY_TAB_TYPE } from '@/constant'
@@ -49,7 +51,10 @@ import { twoColumnProxyGroup } from '@/store/settings'
 import { useSessionStorage } from '@vueuse/core'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
-const { padding } = usePaddingForViews()
+const { padding } = usePaddingForViews({
+  offsetTop: 0,
+  offsetBottom: 0,
+})
 const proxiesRef = ref()
 const scrollStatus = useSessionStorage('cache/proxies-scroll-status', {
   [PROXY_TAB_TYPE.PROVIDER]: 0,

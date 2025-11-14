@@ -1,4 +1,5 @@
 import { isSingBox } from '@/api'
+import { useCtrlsBar } from '@/composables/useCtrlsBar'
 import { LOG_LEVEL } from '@/constant'
 import { initLogs, isPaused, logFilter, logLevel, logTypeFilter, logs } from '@/store/logs'
 import { logRetentionLimit, logSearchHistory } from '@/store/settings'
@@ -17,15 +18,10 @@ import DialogWrapper from '../common/DialogWrapper.vue'
 import TextInput from '../common/TextInput.vue'
 
 export default defineComponent({
-  props: {
-    isLargeCtrlsBar: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  setup(props) {
+  setup() {
     const { t } = useI18n()
     const settingsModel = ref(false)
+    const { isLargeCtrlsBar } = useCtrlsBar()
     const insertLogSearchHistory = debounce((log: string) => {
       if (!log) {
         return
@@ -155,7 +151,7 @@ export default defineComponent({
         <select
           class={[
             'join-item select select-sm',
-            props.isLargeCtrlsBar ? 'w-36' : 'w-24 max-w-40 flex-1',
+            isLargeCtrlsBar.value ? 'w-36' : 'w-24 max-w-40 flex-1',
           ]}
           v-model={logTypeFilter.value}
         >
@@ -234,21 +230,18 @@ export default defineComponent({
         </div>
       )
 
-      if (!props.isLargeCtrlsBar) {
-        return (
-          <div class="flex flex-col gap-2 p-2">
-            <div class="flex w-full justify-between gap-2">
-              <div class="join flex-1">{levelSelect}</div>
-              {buttons}
-            </div>
-            <div class="join">
-              {logTypeSelect}
-              {searchInput}
-            </div>
+      const content = !isLargeCtrlsBar.value ? (
+        <div class="flex flex-col gap-2 p-2">
+          <div class="flex w-full justify-between gap-2">
+            <div class="join flex-1">{levelSelect}</div>
+            {buttons}
           </div>
-        )
-      }
-      return (
+          <div class="join">
+            {logTypeSelect}
+            {searchInput}
+          </div>
+        </div>
+      ) : (
         <div class="flex items-center justify-between gap-2 p-2">
           <div class="flex items-center gap-2">
             {levelSelect}
@@ -260,6 +253,8 @@ export default defineComponent({
           {buttons}
         </div>
       )
+
+      return <div class="glass-panel ctrls-bar">{content}</div>
     }
   },
 })

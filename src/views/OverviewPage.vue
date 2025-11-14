@@ -15,10 +15,12 @@
       <TopologyCharts />
     </div>
     <ConnectionHistory />
-    <div class="flex-1"></div>
-    <div class="card items-center justify-center gap-2 p-2 sm:flex-row">
-      {{ getLabelFromBackend(activeBackend!) }} :
-      <BackendVersion />
+    <div class="flex flex-1 flex-col items-center justify-end">
+      <div class="card w-full flex-row items-center justify-center gap-2 p-2 text-xs sm:text-sm">
+        {{ getLabelFromBackend(activeBackend!) }}
+        <span class="mx-1">|</span>
+        <BackendVersion />
+      </div>
     </div>
   </div>
 </template>

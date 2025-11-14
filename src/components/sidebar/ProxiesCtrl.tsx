@@ -1,5 +1,6 @@
 import { disconnectByIdAPI, isSingBox, updateProxyProviderAPI } from '@/api'
 import { renderGroups } from '@/composables/proxies'
+import { useCtrlsBar } from '@/composables/useCtrlsBar'
 import { PROXY_SORT_TYPE, PROXY_TAB_TYPE, ROUTE_NAME, SETTINGS_MENU_KEY } from '@/constant'
 import { getMinCardWidth } from '@/helper/utils'
 import { configs, updateConfigs } from '@/store/config'
@@ -42,18 +43,13 @@ import TextInput from '../common/TextInput.vue'
 
 export default defineComponent({
   name: 'ProxiesCtrl',
-  props: {
-    isLargeCtrlsBar: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  setup(props) {
+  setup() {
     const { t } = useI18n()
     const router = useRouter()
     const isUpgrading = ref(false)
     const isAllLatencyTesting = ref(false)
     const settingsModel = ref(false)
+    const { isLargeCtrlsBar } = useCtrlsBar()
     const handlerClickUpdateAllProviders = async () => {
       if (isUpgrading.value) return
       isUpgrading.value = true
@@ -159,7 +155,7 @@ export default defineComponent({
       )
       const modeSelect = configs.value && (
         <select
-          class={['select select-sm inline-block', props.isLargeCtrlsBar ? 'min-w-40' : 'min-w-24']}
+          class={['select select-sm inline-block', isLargeCtrlsBar.value ? 'min-w-40' : 'min-w-24']}
           v-model={configs.value.mode}
           onChange={handlerModeChange}
         >
@@ -226,7 +222,7 @@ export default defineComponent({
 
       const searchInput = (
         <TextInput
-          class={['w-32 flex-1', props.isLargeCtrlsBar && 'max-w-80']}
+          class={['w-32 flex-1', isLargeCtrlsBar.value && 'max-w-80']}
           v-model={proxiesFilter.value}
           placeholder={`${t('search')} | ${t('searchMultiple')}`}
           clearable={true}
@@ -334,26 +330,23 @@ export default defineComponent({
         </>
       )
 
-      if (!props.isLargeCtrlsBar) {
-        return (
-          <div class="flex flex-col gap-2 p-2">
-            {hasProviders.value && (
-              <div class="flex gap-2">
-                {tabs}
-                {upgradeAllIcon}
-              </div>
-            )}
-            <div class="flex w-full gap-2">
-              {modeSelect}
-              {searchInput}
-              {settingsModal}
-              {toggleCollapseAll}
-              {latencyTestAll}
+      const content = !isLargeCtrlsBar.value ? (
+        <div class="flex flex-col gap-2 p-2">
+          {hasProviders.value && (
+            <div class="flex gap-2">
+              {tabs}
+              {upgradeAllIcon}
             </div>
+          )}
+          <div class="flex w-full gap-2">
+            {modeSelect}
+            {searchInput}
+            {settingsModal}
+            {toggleCollapseAll}
+            {latencyTestAll}
           </div>
-        )
-      }
-      return (
+        </div>
+      ) : (
         <div class="flex gap-2 p-2">
           {hasProviders.value && tabs}
           {modeSelect}
@@ -364,6 +357,8 @@ export default defineComponent({
           {latencyTestAll}
         </div>
       )
+
+      return <div class="glass-panel ctrls-bar">{content}</div>
     }
   },
 })

@@ -22,20 +22,16 @@
           />
         </div>
 
-        <div
-          v-if="ctrlsMap[route.name as string]"
-          class="glass-panel ctrls-bar"
-          ref="ctrlsBarRef"
-        >
-          <component
-            :is="ctrlsMap[route.name as string]"
-            :is-large-ctrls-bar="isLargeCtrlsBar"
-          />
-        </div>
-
         <template v-if="isMiddleScreen">
           <div
-            class="glass-panel dock dock-sm h-14 w-auto"
+            class="dock-shadow fixed right-0 bottom-0 left-0"
+            :style="{
+              height: 'env(safe-area-inset-bottom)',
+              background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2))',
+            }"
+          ></div>
+          <div
+            class="glass-panel dock dock-sm z-10 h-14 w-auto"
             :style="{
               padding: '0',
               bottom: 'calc(var(--spacing) * 2 + env(safe-area-inset-bottom))',
@@ -87,15 +83,11 @@
 <script setup lang="ts">
 import { isBackendAvailable } from '@/api'
 import DialogWrapper from '@/components/common/DialogWrapper.vue'
-import ConnectionCtrl from '@/components/sidebar/ConnectionCtrl.tsx'
-import LogsCtrl from '@/components/sidebar/LogsCtrl.tsx'
-import ProxiesCtrl from '@/components/sidebar/ProxiesCtrl.tsx'
-import RulesCtrl from '@/components/sidebar/RulesCtrl.tsx'
 import SideBar from '@/components/sidebar/SideBar.vue'
-import { ctrlsHeight, dockTop } from '@/composables/paddingViews'
+import { dockTop } from '@/composables/paddingViews'
 import { useSettings } from '@/composables/settings'
 import { useSwipeRouter } from '@/composables/swipe'
-import { PROXY_TAB_TYPE, ROUTE_ICON_MAP, ROUTE_NAME, RULE_TAB_TYPE } from '@/constant'
+import { PROXY_TAB_TYPE, ROUTE_ICON_MAP, RULE_TAB_TYPE } from '@/constant'
 import { renderRoutes } from '@/helper'
 import { showNotification } from '@/helper/notification'
 import { getLabelFromBackend, isMiddleScreen } from '@/helper/utils'
@@ -105,42 +97,18 @@ import { initLogs } from '@/store/logs'
 import { initSatistic } from '@/store/overview'
 import { fetchProxies, proxiesTabShow } from '@/store/proxies'
 import { fetchRules, rulesTabShow } from '@/store/rules'
-import { isSidebarCollapsed, useConnectionCard } from '@/store/settings'
+import { isSidebarCollapsed } from '@/store/settings'
 import { activeBackend, activeUuid, backendList } from '@/store/setup'
 import type { Backend } from '@/types'
 import { useDocumentVisibility, useElementBounding } from '@vueuse/core'
-import { computed, ref, watch, type Component } from 'vue'
+import { ref, watch } from 'vue'
 import { RouterView, useRouter } from 'vue-router'
-
-const ctrlsMap: Record<string, Component> = {
-  [ROUTE_NAME.connections]: ConnectionCtrl,
-  [ROUTE_NAME.logs]: LogsCtrl,
-  [ROUTE_NAME.proxies]: ProxiesCtrl,
-  [ROUTE_NAME.rules]: RulesCtrl,
-}
 
 const router = useRouter()
 const { swiperRef } = useSwipeRouter()
 
 const dockRef = ref<HTMLDivElement>()
-const ctrlsBarRef = ref<HTMLDivElement>()
-const { bottom: ctrlsBarBottom, width: ctrlsBarWidth } = useElementBounding(ctrlsBarRef)
 const { top: dockRefTop } = useElementBounding(dockRef)
-
-const isLargeCtrlsBar = computed(() => {
-  if (router.currentRoute.value.name === ROUTE_NAME.connections && useConnectionCard.value) {
-    return ctrlsBarWidth.value > 860
-  }
-  return ctrlsBarWidth.value > 720
-})
-
-watch(
-  ctrlsBarBottom,
-  () => {
-    ctrlsHeight.value = ctrlsBarBottom.value ?? 64
-  },
-  { immediate: true },
-)
 
 watch(
   dockRefTop,

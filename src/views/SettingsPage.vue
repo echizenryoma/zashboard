@@ -1,27 +1,9 @@
 <template>
-  <div class="relative flex h-full flex-col overflow-hidden">
-    <!-- 右侧内容区域 -->
-    <div
-      ref="scrollContainerRef"
-      class="overflow-x-hidden overflow-y-auto"
-      @scroll.passive="handleScroll"
-      :style="padding"
-    >
-      <div class="grid grid-cols-1 gap-2 pt-12">
-        <div class="flex flex-col gap-4 px-2">
-          <div
-            v-for="item in menuItems"
-            :key="item.key"
-            :id="`item-${item.key}`"
-            :data-key="item.key"
-            class="card"
-          >
-            <component :is="item.component" />
-          </div>
-        </div>
-      </div>
-    </div>
-
+  <div
+    class="relative flex h-full flex-col overflow-y-auto"
+    ref="scrollContainerRef"
+    @scroll.passive="handleScroll"
+  >
     <!-- 左侧菜单 -->
     <SettingsMenu
       ref="menuComponentRef"
@@ -29,6 +11,23 @@
       :active-menu-key="activeMenuKey"
       @menu-click="handleMenuClick"
     />
+    <!-- 右侧内容区域 -->
+    <div
+      class="grid grid-cols-1 gap-2 p-2"
+      :style="padding"
+    >
+      <div class="flex flex-col gap-4">
+        <div
+          v-for="item in menuItems"
+          :key="item.key"
+          :id="`item-${item.key}`"
+          :data-key="item.key"
+          class="card"
+        >
+          <component :is="item.component" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

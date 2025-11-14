@@ -1,4 +1,5 @@
 import { updateRuleProviderAPI } from '@/api'
+import { useCtrlsBar } from '@/composables/useCtrlsBar'
 import { RULE_TAB_TYPE } from '@/constant'
 import { showNotification } from '@/helper/notification'
 import { fetchRules, ruleProviderList, rules, rulesFilter, rulesTabShow } from '@/store/rules'
@@ -11,16 +12,11 @@ import TextInput from '../common/TextInput.vue'
 
 export default defineComponent({
   name: 'RulesCtrl',
-  props: {
-    isLargeCtrlsBar: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  setup(props) {
+  setup() {
     const { t } = useI18n()
     const settingsModel = ref(false)
     const isUpgrading = ref(false)
+    const { isLargeCtrlsBar } = useCtrlsBar()
     const hasProviders = computed(() => {
       return ruleProviderList.value.length > 0
     })
@@ -98,7 +94,7 @@ export default defineComponent({
 
       const searchInput = (
         <TextInput
-          class={props.isLargeCtrlsBar ? 'w-80' : 'w-32 flex-1'}
+          class={isLargeCtrlsBar.value ? 'w-80' : 'w-32 flex-1'}
           v-model={rulesFilter.value}
           placeholder={`${t('search')} | ${t('searchMultiple')}`}
           clearable={true}
@@ -139,23 +135,20 @@ export default defineComponent({
         </>
       )
 
-      if (!props.isLargeCtrlsBar) {
-        return (
-          <div class="flex flex-col gap-2 p-2">
-            {hasProviders.value && (
-              <div class="flex gap-2">
-                {tabs}
-                {upgradeAllIcon}
-              </div>
-            )}
-            <div class="flex w-full gap-2">
-              {searchInput}
-              {settingsModal}
+      const content = !isLargeCtrlsBar.value ? (
+        <div class="flex flex-col gap-2 p-2">
+          {hasProviders.value && (
+            <div class="flex gap-2">
+              {tabs}
+              {upgradeAllIcon}
             </div>
+          )}
+          <div class="flex w-full gap-2">
+            {searchInput}
+            {settingsModal}
           </div>
-        )
-      }
-      return (
+        </div>
+      ) : (
         <div class="flex flex-wrap gap-2 p-2">
           {hasProviders.value && tabs}
           {searchInput}
@@ -164,6 +157,8 @@ export default defineComponent({
           {settingsModal}
         </div>
       )
+
+      return <div class="glass-panel ctrls-bar">{content}</div>
     }
   },
 })
