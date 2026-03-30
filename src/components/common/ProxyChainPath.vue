@@ -143,6 +143,7 @@ const handleSelect = (chain: string) => {
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
   white-space: nowrap;
+  color: color-mix(in srgb, var(--color-base-content) 80%, transparent);
 }
 
 .proxy-chain-node:hover {
