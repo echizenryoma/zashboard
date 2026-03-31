@@ -35,7 +35,7 @@
               :class="[
                 header.column.getCanSort() ? 'cursor-pointer select-none' : '',
                 header.column.getIsPinned && header.column.getIsPinned() === 'left'
-                  ? 'pinned-td bg-base-100 sticky -left-2 z-20'
+                  ? 'pinned-td bg-base-100 sticky left-0 z-20'
                   : '',
               ]"
               :style="
@@ -115,9 +115,7 @@
             }"
             class="hover:bg-primary! hover:text-primary-content!"
             :class="[
-              index % 2 === 1
-                ? 'bg-base-100'
-                : 'bg-[color-mix(in_oklab,var(--color-base-200)_50%,var(--color-base-100))]',
+              index % 2 === 0 && 'bg-base-150',
               !isDragging ? 'cursor-pointer' : 'cursor-grabbing',
             ]"
             @click="handlerClickRow(rows[virtualRow.index])"
@@ -145,7 +143,7 @@
                         'max-w-xl truncate',
                     ),
                 cell.column.getIsPinned && cell.column.getIsPinned() === 'left'
-                  ? 'pinned-td sticky -left-2 z-20 bg-inherit shadow-sm'
+                  ? 'pinned-td sticky left-0 z-20 bg-inherit shadow-sm'
                   : '',
               ]"
               @contextmenu="handleCellRightClick($event, cell)"
