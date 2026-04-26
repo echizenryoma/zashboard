@@ -31,7 +31,7 @@
     <div class="mt-3 flex flex-col gap-3">
       <!-- China IP -->
       <div>
-        <div class="text-base-content/60 text-xs">ipip.net</div>
+        <div class="text-base-content/60 text-xs">ip.cn</div>
         <div class="mt-0.5 text-sm font-medium">
           {{ showPrivacy ? ipForChina.ipWithPrivacy[0] : ipForChina.ip[0] }}
           <span

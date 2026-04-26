@@ -12,13 +12,24 @@ export interface IPInfo {
 
 // china
 export const getIPFromIpipnetAPI = async () => {
-  const response = await fetch('https://myip.ipip.net/json?t=' + Date.now())
+  const response = await fetch('https://my.ip.cn/?t=' + Date.now())
+  const regx = /ip：(.+)\s归属地：(.+)/
+  const match = regx.exec(await response.text())
 
-  return (await response.json()) as {
-    data: {
-      ip: string
-      location: string[]
+  if (!match) {
+    return {
+      data: {
+        ip: '',
+        location: [],
+      },
     }
+  }
+
+  return {
+    data: {
+      ip: match[1],
+      location: match[2].split(' '),
+    },
   }
 }
 
