@@ -93,6 +93,9 @@ const replaceLegacyTheme = (theme: string, defaultTheme: string) => {
   if (theme === 'dark-apple') {
     return 'dark'
   }
+  if (theme === 'light-neutral') {
+    return 'light'
+  }
   if ([...ALL_THEME, ...customThemes.value.map((theme) => theme.name)].includes(theme)) {
     return theme
   }

@@ -10,13 +10,6 @@ div {
   @apply rounded-xs bg-yellow-300 text-black;
 }
 
-[data-theme='light-neutral'],
-[data-theme='dark-neutral'] {
-  --color-low-latency: oklch(0.551 0.08 167);
-  --color-medium-latency: oklch(0.72 0.14 85);
-  --color-high-latency: oklch(0.56 0.17 22);
-}
-
 .dock {
   @apply absolute right-2 left-2 z-30 rounded-3xl;
   backdrop-filter: blur(20px) saturate(180%);

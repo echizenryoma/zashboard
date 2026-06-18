@@ -282,7 +282,7 @@ const sankeyData = computed(() => {
   return { nodes: sortedNodes, links }
 })
 
-const layerColors = ['#6a6fc5', '#a8d4a0', '#fddb8a', '#f2a0a0']
+const layerColors = ['#7a7aad', '#adc7a8', '#e9d5a4', '#dcabab']
 
 const options = computed(() => ({
   backgroundColor: 'transparent',

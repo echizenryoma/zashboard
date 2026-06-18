@@ -121,11 +121,11 @@ const getBgColor = (latency: number) => {
   if (latency === NOT_CONNECTED) {
     return 'bg-base-content/60'
   } else if (latency < lowLatency.value) {
-    return 'bg-low-latency'
+    return 'bg-success'
   } else if (latency < mediumLatency.value) {
-    return 'bg-medium-latency'
+    return 'bg-warning'
   } else {
-    return 'bg-high-latency'
+    return 'bg-error'
   }
 }
 

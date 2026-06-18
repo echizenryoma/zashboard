@@ -134,11 +134,11 @@ export const getColorForLatency = (latency: number) => {
   if (latency === NOT_CONNECTED) {
     return ''
   } else if (latency < lowLatency.value) {
-    return 'text-low-latency'
+    return 'text-success'
   } else if (latency < mediumLatency.value) {
-    return 'text-medium-latency'
+    return 'text-warning'
   } else {
-    return 'text-high-latency'
+    return 'text-error'
   }
 }
 
