@@ -16,7 +16,7 @@
         <a
           class="flex cursor-pointer items-center gap-2 text-lg font-semibold"
           :href="
-            isSingBox
+            isSingBoxCore
               ? 'https://github.com/sagernet/sing-box'
               : MIHOMO_CHANNEL[mihomo?.[0] ?? MIHOMO.Meta].url
           "
@@ -48,7 +48,7 @@
           :setting-key="k.actions"
           class="absolute top-1 right-1 z-10"
         />
-        <template v-if="!isSingBox || displayAllFeatures">
+        <template v-if="!isSingBoxCore || displayAllFeatures">
           <button
             v-if="!activeBackend?.disableUpgradeCore"
             class="btn btn-neutral btn-sm"
@@ -77,7 +77,7 @@
             {{ $t('reloadConfigs') }}
           </button>
           <button
-            v-if="!isSingBox"
+            v-if="!isSingBoxCore"
             class="btn btn-sm"
             @click="showUpdateConfigModal = true"
           >
@@ -130,7 +130,7 @@
     </div>
 
     <div
-      v-if="!isSingBox && configs && hasVisibleSettings"
+      v-if="!isSingBoxCore && configs && hasVisibleSettings"
       class="grid"
     >
       <div class="settings-section-label">
@@ -219,7 +219,7 @@ import {
   reloadConfigsAPI,
   updateGeoDataAPI,
 } from '@/assembly/config'
-import { isCoreUpdateAvailable, isSingBox, mihomo, restartCoreAPI } from '@/assembly/version'
+import { isCoreUpdateAvailable, isSingBoxCore, mihomo, restartCoreAPI } from '@/assembly/version'
 import BackendVersion from '@/components/common/BackendVersion.vue'
 import BackendPortsGrid from '@/components/settings/backend/BackendPortsGrid.vue'
 import BackendSwitch from '@/components/settings/backend/BackendSwitch.vue'
@@ -265,7 +265,7 @@ const hasVisibleItems = computed(() => {
 
 const hasVisibleSettings = computed(() => {
   return (
-    !isSingBox.value &&
+    !isSingBoxCore.value &&
     !!configs.value &&
     (isVisiblePorts.value ||
       (configs.value.tun && canShowTunMode.value) ||
