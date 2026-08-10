@@ -122,20 +122,6 @@
       </div>
 
       <div
-        class="bg-base-100/75 pointer-events-none absolute right-2 bottom-2 flex max-w-[calc(100%-1rem)] flex-wrap gap-x-3 gap-y-1 rounded-lg px-2 py-1.5 text-[11px] shadow backdrop-blur-md"
-      >
-        <span class="flex items-center gap-1">
-          <i class="h-0.5 w-4 bg-[#5fcaff]" />{{ t('earthConnectionLine') }}
-        </span>
-        <span class="flex items-center gap-1">
-          <i class="h-1.5 w-1.5 rounded-full bg-[#ffdc5e]" />{{ t('upload') }}
-        </span>
-        <span class="flex items-center gap-1">
-          <i class="h-1.5 w-1.5 rounded-full bg-[#3235ee]" />{{ t('download') }}
-        </span>
-      </div>
-
-      <div
         class="absolute bottom-2 left-2 flex flex-col items-start gap-0.5 text-[10px]"
         :class="earthVisualMode === 'flat' ? 'text-base-content/55' : 'text-white/65'"
       >

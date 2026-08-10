@@ -39,9 +39,8 @@ const MAX_INITIAL_LATITUDE = 15
 const FLOW_DURATION_SECONDS = 0.85
 const FLOW_STREAK_LENGTH = 0.14
 const FLOW_STREAK_SEGMENTS = 14
-const UPLOAD_COLOR = new THREE.Color('#ffdc5e')
-const DOWNLOAD_COLOR = new THREE.Color('#3235ee')
-const FLOW_TAIL_COLOR = new THREE.Color('#5fcaff')
+const FLOW_COLOR = new THREE.Color('#ffffff')
+const FLAT_LIGHT_FLOW_COLOR = new THREE.Color('#5ad9ef')
 const LINE_ORIGIN_COLOR = new THREE.Color('#b8f7ff')
 const LINE_DESTINATION_COLOR = new THREE.Color('#4f9dff')
 const ROLE_COLORS = {
@@ -60,6 +59,11 @@ const ROLE_SCALES = {
 } as const
 const CITY_LABEL_CLASS_NAME =
   'pointer-events-none whitespace-nowrap rounded-md bg-base-100/80 px-1.5 py-1 text-[10px] font-semibold leading-none text-base-content shadow-sm backdrop-blur-sm'
+const CITY_LABEL_COLLISION_GAP = 4
+const CITY_LABEL_MIN_BUDGET = 3
+const CITY_LABEL_MAX_BUDGET = 64
+const CITY_LABEL_AREA_PER_ITEM = 5_500
+const CITY_LABEL_FALLBACK_HEIGHT = 18
 const FLAT_GLOBE_PALETTES = {
   light: {
     ocean: '#dce6f0',
@@ -89,6 +93,15 @@ interface RuntimeRoute {
 interface EndpointRuntime extends EarthEndpointInfo {
   key: string
   position: THREE.Vector3
+}
+
+interface ProjectedCityLabel {
+  endpoint: EndpointRuntime
+  label: CSS2DObject
+  left: number
+  right: number
+  top: number
+  bottom: number
 }
 
 export interface EarthRenderer {
@@ -490,6 +503,7 @@ export const createEarthRenderer = async (
   const labelWorldPosition = new THREE.Vector3()
   const labelSurfaceNormal = new THREE.Vector3()
   const labelToCamera = new THREE.Vector3()
+  const projectedLabelPosition = new THREE.Vector3()
   const clock = new THREE.Clock()
 
   const applyColorScheme = () => {
@@ -518,19 +532,102 @@ export const createEarthRenderer = async (
   applyColorScheme()
   applyVisualMode()
 
-  // CSS labels do not share the globe's depth buffer. Hide labels beyond the
-  // tangent horizon so cities on the far side do not show through the Earth.
+  const fallbackLabelWidth = (text: string) =>
+    12 +
+    Array.from(text).reduce(
+      (width, character) => width + (character.codePointAt(0)! > 0xff ? 10 : 6),
+      0,
+    )
+
+  const labelsOverlap = (left: ProjectedCityLabel, right: ProjectedCityLabel) =>
+    left.left < right.right + CITY_LABEL_COLLISION_GAP &&
+    left.right + CITY_LABEL_COLLISION_GAP > right.left &&
+    left.top < right.bottom + CITY_LABEL_COLLISION_GAP &&
+    left.bottom + CITY_LABEL_COLLISION_GAP > right.top
+
+  // CSS labels do not share the globe's depth buffer. First discard cities past
+  // the tangent horizon, then choose a zoom-dependent number of high-priority
+  // labels whose screen-space rectangles do not overlap.
   const updateEndpointLabelVisibility = () => {
     camera.updateWorldMatrix(true, false)
     earthGroup.updateWorldMatrix(true, true)
     camera.getWorldPosition(cameraWorldPosition)
     earthGroup.getWorldPosition(earthWorldPosition)
 
-    for (const label of endpointLabels.values()) {
+    const width = labelRenderer.domElement.clientWidth
+    const height = labelRenderer.domElement.clientHeight
+    const candidates: ProjectedCityLabel[] = []
+
+    for (const endpoint of endpointRuntime) {
+      const label = endpointLabels.get(endpoint.key)
+
+      if (!label) continue
+      label.visible = false
       label.getWorldPosition(labelWorldPosition)
       labelSurfaceNormal.subVectors(labelWorldPosition, earthWorldPosition).normalize()
       labelToCamera.subVectors(cameraWorldPosition, labelWorldPosition)
-      label.visible = labelSurfaceNormal.dot(labelToCamera) > 0
+
+      if (labelSurfaceNormal.dot(labelToCamera) <= 0) continue
+
+      projectedLabelPosition.copy(labelWorldPosition).project(camera)
+      if (
+        projectedLabelPosition.z < -1 ||
+        projectedLabelPosition.z > 1 ||
+        projectedLabelPosition.x < -1 ||
+        projectedLabelPosition.x > 1 ||
+        projectedLabelPosition.y < -1 ||
+        projectedLabelPosition.y > 1
+      ) {
+        continue
+      }
+
+      const x = (projectedLabelPosition.x * 0.5 + 0.5) * width
+      const y = (-projectedLabelPosition.y * 0.5 + 0.5) * height
+      const elementBounds = label.element.getBoundingClientRect()
+      const labelWidth = elementBounds.width || fallbackLabelWidth(endpoint.city)
+      const labelHeight = elementBounds.height || CITY_LABEL_FALLBACK_HEIGHT
+
+      candidates.push({
+        endpoint,
+        label,
+        left: x - labelWidth * label.center.x,
+        right: x + labelWidth * (1 - label.center.x),
+        top: y - labelHeight * label.center.y,
+        bottom: y + labelHeight * (1 - label.center.y),
+      })
+    }
+
+    candidates.sort(
+      (left, right) =>
+        Number(right.endpoint.role === 'origin') - Number(left.endpoint.role === 'origin') ||
+        right.endpoint.connections - left.endpoint.connections ||
+        left.endpoint.key.localeCompare(right.endpoint.key),
+    )
+
+    const cameraDistance = camera.position.distanceTo(controls.target)
+    const zoom =
+      1 -
+      THREE.MathUtils.clamp(
+        (cameraDistance - controls.minDistance) / (controls.maxDistance - controls.minDistance),
+        0,
+        1,
+      )
+    const viewportBudget = THREE.MathUtils.clamp(
+      Math.floor((width * height) / CITY_LABEL_AREA_PER_ITEM),
+      CITY_LABEL_MIN_BUDGET,
+      CITY_LABEL_MAX_BUDGET,
+    )
+    const labelBudget = Math.round(
+      THREE.MathUtils.lerp(CITY_LABEL_MIN_BUDGET, viewportBudget, zoom * zoom),
+    )
+    const accepted: ProjectedCityLabel[] = []
+
+    for (const candidate of candidates) {
+      if (accepted.length >= labelBudget) break
+      if (accepted.some((visibleLabel) => labelsOverlap(candidate, visibleLabel))) continue
+
+      candidate.label.visible = true
+      accepted.push(candidate)
     }
   }
 
@@ -546,6 +643,8 @@ export const createEarthRenderer = async (
     if (flowPositions.length === 0) return
 
     let flowSegmentIndex = 0
+    const flowColor =
+      visualMode === 'flat' && colorScheme === 'light' ? FLAT_LIGHT_FLOW_COLOR : FLOW_COLOR
 
     for (const runtime of runtimeRoutes) {
       for (const direction of ['upload', 'download'] as const) {
@@ -572,8 +671,6 @@ export const createEarthRenderer = async (
           1,
           Math.ceil((visibleLength / FLOW_STREAK_LENGTH) * FLOW_STREAK_SEGMENTS),
         )
-        const color = direction === 'upload' ? UPLOAD_COLOR : DOWNLOAD_COLOR
-
         for (let segmentIndex = 0; segmentIndex < segmentCount; segmentIndex += 1) {
           const startRatio = segmentIndex / segmentCount
           const endRatio = (segmentIndex + 1) / segmentCount
@@ -597,14 +694,12 @@ export const createEarthRenderer = async (
           flowPositions[offset + 3] = flowEnd.x
           flowPositions[offset + 4] = flowEnd.y
           flowPositions[offset + 5] = flowEnd.z
-          const startStrength = 0.06 + Math.pow(startRatio, 1.7) * 0.94
-          const endStrength = 0.06 + Math.pow(endRatio, 1.7) * 0.94
-          flowColors[offset] = THREE.MathUtils.lerp(FLOW_TAIL_COLOR.r, color.r, startStrength)
-          flowColors[offset + 1] = THREE.MathUtils.lerp(FLOW_TAIL_COLOR.g, color.g, startStrength)
-          flowColors[offset + 2] = THREE.MathUtils.lerp(FLOW_TAIL_COLOR.b, color.b, startStrength)
-          flowColors[offset + 3] = THREE.MathUtils.lerp(FLOW_TAIL_COLOR.r, color.r, endStrength)
-          flowColors[offset + 4] = THREE.MathUtils.lerp(FLOW_TAIL_COLOR.g, color.g, endStrength)
-          flowColors[offset + 5] = THREE.MathUtils.lerp(FLOW_TAIL_COLOR.b, color.b, endStrength)
+          flowColors[offset] = flowColor.r
+          flowColors[offset + 1] = flowColor.g
+          flowColors[offset + 2] = flowColor.b
+          flowColors[offset + 3] = flowColor.r
+          flowColors[offset + 4] = flowColor.g
+          flowColors[offset + 5] = flowColor.b
           flowSegmentIndex += 1
         }
       }
@@ -1008,12 +1103,14 @@ export const createEarthRenderer = async (
       if (visualMode === mode) return
       visualMode = mode
       applyVisualMode()
+      updateFlows(0, false)
       render()
     },
     setColorScheme(scheme) {
       if (colorScheme === scheme) return
       colorScheme = scheme
       applyColorScheme()
+      updateFlows(0, false)
       if (visualMode === 'flat') render()
     },
     dispose() {
