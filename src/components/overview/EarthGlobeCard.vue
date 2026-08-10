@@ -605,7 +605,10 @@ const handleWorkerMessage = ({ data }: MessageEvent<GeoWorkerResponse>) => {
   if (data.received != null) downloadedBytes.value = data.received
   if (data.total != null) downloadTotalBytes.value = data.total
 
-  if (data.status === 'ready') scheduleRouteRefresh()
+  if (data.status === 'ready') {
+    locationCache.clear()
+    scheduleRouteRefresh()
+  }
   if (data.status !== 'ready' && data.status !== 'downloading') {
     routeCount.value = 0
     renderer.value?.setRoutes([])
