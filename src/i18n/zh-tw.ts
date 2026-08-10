@@ -501,6 +501,8 @@ const zhTW: LANG_MESSAGE = {
   earthOriginAPI: '公網 IP 服務',
   earthLocalIP: '本機 IP',
   earthToggleIP: '顯示或隱藏本機 IP',
+  earthHideCityLabels: '隱藏城市名稱',
+  earthShowCityLabels: '顯示城市名稱',
   earthPauseRotation: '停止地球自轉',
   earthResumeRotation: '繼續地球自轉',
   earthExpand: '展開地球畫面',

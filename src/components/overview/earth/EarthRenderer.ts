@@ -5,6 +5,7 @@ import surfaceTextureURL from '@/assets/images/earth/earth-surface.webp'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js'
 import { LineSegments2 } from 'three/addons/lines/webgpu/LineSegments2.js'
+import { CSS2DObject, CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js'
 import {
   bumpMap,
   cameraPosition,
@@ -57,6 +58,8 @@ const ROLE_SCALES = {
   origin: 1.18,
   destination: 1,
 } as const
+const CITY_LABEL_CLASS_NAME =
+  'pointer-events-none whitespace-nowrap rounded-md bg-base-100/80 px-1.5 py-1 text-[10px] font-semibold leading-none text-base-content shadow-sm backdrop-blur-sm'
 const FLAT_GLOBE_PALETTES = {
   light: {
     ocean: '#dce6f0',
@@ -93,6 +96,7 @@ export interface EarthRenderer {
   setInitialLocation: (location: EarthLocation) => void
   setReducedMotion: (reduced: boolean) => void
   setAutoRotation: (enabled: boolean) => void
+  setCityLabelsVisible: (visible: boolean) => void
   setVisualMode: (mode: EarthVisualMode) => void
   setColorScheme: (scheme: EarthColorScheme) => void
   dispose: () => void
@@ -218,6 +222,12 @@ export const createEarthRenderer = async (
     throw error
   }
 
+  const labelRenderer = new CSS2DRenderer()
+  labelRenderer.sortObjects = false
+  labelRenderer.domElement.className = 'pointer-events-none absolute inset-0 overflow-hidden'
+  labelRenderer.domElement.setAttribute('aria-hidden', 'true')
+  container.appendChild(labelRenderer.domElement)
+
   const controls = new OrbitControls(camera, renderer.domElement)
   controls.enableDamping = true
   controls.enablePan = false
@@ -243,6 +253,7 @@ export const createEarthRenderer = async (
     ])
   } catch (error) {
     controls.dispose()
+    labelRenderer.domElement.remove()
     renderer.dispose()
     renderer.domElement.remove()
     throw error
@@ -313,6 +324,8 @@ export const createEarthRenderer = async (
   const globe = new THREE.Mesh<THREE.SphereGeometry, THREE.Material>(sphereGeometry, globeMaterial)
   earthGroup.add(globe)
   scene.add(earthGroup)
+  const endpointLabelGroup = new THREE.Group()
+  earthGroup.add(endpointLabelGroup)
 
   const atmosphereMaterial = new THREE.MeshBasicNodeMaterial({
     side: THREE.BackSide,
@@ -447,6 +460,7 @@ export const createEarthRenderer = async (
   let endpointMesh: THREE.InstancedMesh | null = null
   let endpointGlowMesh: THREE.InstancedMesh | null = null
   let endpointRuntime: EndpointRuntime[] = []
+  const endpointLabels = new Map<string, CSS2DObject>()
   let runtimeRoutes: RuntimeRoute[] = []
   let currentSignature = ''
   let reducedMotion = options.reducedMotion
@@ -471,6 +485,11 @@ export const createEarthRenderer = async (
   const flowEnd = new THREE.Vector3()
   const raycaster = new THREE.Raycaster()
   const pointer = new THREE.Vector2()
+  const cameraWorldPosition = new THREE.Vector3()
+  const earthWorldPosition = new THREE.Vector3()
+  const labelWorldPosition = new THREE.Vector3()
+  const labelSurfaceNormal = new THREE.Vector3()
+  const labelToCamera = new THREE.Vector3()
   const clock = new THREE.Clock()
 
   const applyColorScheme = () => {
@@ -499,8 +518,28 @@ export const createEarthRenderer = async (
   applyColorScheme()
   applyVisualMode()
 
+  // CSS labels do not share the globe's depth buffer. Hide labels beyond the
+  // tangent horizon so cities on the far side do not show through the Earth.
+  const updateEndpointLabelVisibility = () => {
+    camera.updateWorldMatrix(true, false)
+    earthGroup.updateWorldMatrix(true, true)
+    camera.getWorldPosition(cameraWorldPosition)
+    earthGroup.getWorldPosition(earthWorldPosition)
+
+    for (const label of endpointLabels.values()) {
+      label.getWorldPosition(labelWorldPosition)
+      labelSurfaceNormal.subVectors(labelWorldPosition, earthWorldPosition).normalize()
+      labelToCamera.subVectors(cameraWorldPosition, labelWorldPosition)
+      label.visible = labelSurfaceNormal.dot(labelToCamera) > 0
+    }
+  }
+
   const render = () => {
-    if (!disposed && visible && intersecting) renderer.render(scene, camera)
+    if (!disposed && visible && intersecting) {
+      updateEndpointLabelVisibility()
+      renderer.render(scene, camera)
+      labelRenderer.render(scene, camera)
+    }
   }
 
   const updateFlows = (delta: number, advance: boolean) => {
@@ -611,6 +650,38 @@ export const createEarthRenderer = async (
     }
   }
 
+  const syncEndpointLabels = () => {
+    const visibleKeys = new Set<string>()
+
+    for (const endpoint of endpointRuntime) {
+      const city = endpoint.city.trim()
+
+      if (!city) continue
+
+      visibleKeys.add(endpoint.key)
+      let label = endpointLabels.get(endpoint.key)
+
+      if (!label) {
+        const element = document.createElement('div')
+        element.className = CITY_LABEL_CLASS_NAME
+        label = new CSS2DObject(element)
+        label.center.set(0.5, 1.5)
+        label.renderOrder = 7
+        endpointLabels.set(endpoint.key, label)
+        endpointLabelGroup.add(label)
+      }
+
+      label.element.textContent = city
+      label.position.copy(endpoint.position)
+    }
+
+    for (const [key, label] of endpointLabels) {
+      if (visibleKeys.has(key)) continue
+      endpointLabelGroup.remove(label)
+      endpointLabels.delete(key)
+    }
+  }
+
   const rebuildEndpoints = (routes: EarthRoute[]) => {
     if (endpointMesh) {
       earthGroup.remove(endpointMesh)
@@ -648,6 +719,7 @@ export const createEarthRenderer = async (
     }
 
     endpointRuntime = [...endpoints.values()]
+    syncEndpointLabels()
     const capacity = Math.max(1, endpointRuntime.length)
     endpointMesh = new THREE.InstancedMesh(
       endpointGeometry,
@@ -715,6 +787,8 @@ export const createEarthRenderer = async (
 
       if (info) Object.assign(endpoint, info)
     }
+
+    syncEndpointLabels()
   }
 
   const rebuildGeometry = (routes: EarthRoute[]) => {
@@ -863,6 +937,7 @@ export const createEarthRenderer = async (
     camera.aspect = width / height
     camera.updateProjectionMatrix()
     renderer.setSize(width, height, false)
+    labelRenderer.setSize(width, height)
     render()
   })
   resizeObserver.observe(container)
@@ -925,6 +1000,10 @@ export const createEarthRenderer = async (
     setAutoRotation(enabled) {
       autoRotation = enabled
     },
+    setCityLabelsVisible(visible) {
+      endpointLabelGroup.visible = visible
+      render()
+    },
     setVisualMode(mode) {
       if (visualMode === mode) return
       visualMode = mode
@@ -958,6 +1037,8 @@ export const createEarthRenderer = async (
       flowMaterial.dispose()
       endpointMesh?.dispose()
       endpointGlowMesh?.dispose()
+      endpointLabelGroup.clear()
+      endpointLabels.clear()
       endpointGeometry.dispose()
       endpointGlowGeometry.dispose()
       endpointMaterial.dispose()
@@ -968,6 +1049,7 @@ export const createEarthRenderer = async (
       flatGlobeMaterial.dispose()
       atmosphereMaterial.dispose()
       textures.forEach((item) => item.dispose())
+      labelRenderer.domElement.remove()
       renderer.dispose()
       renderer.domElement.remove()
     },

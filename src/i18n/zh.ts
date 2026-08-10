@@ -501,6 +501,8 @@ const zh: LANG_MESSAGE = {
   earthOriginAPI: '公网 IP 服务',
   earthLocalIP: '本机 IP',
   earthToggleIP: '显示或隐藏本机 IP',
+  earthHideCityLabels: '隐藏城市名称',
+  earthShowCityLabels: '显示城市名称',
   earthPauseRotation: '停止地球自转',
   earthResumeRotation: '继续地球自转',
   earthExpand: '扩展地球画面',

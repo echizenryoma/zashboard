@@ -19,6 +19,18 @@
         </select>
         <button
           class="btn btn-ghost btn-sm btn-square"
+          :aria-label="t(showCityLabels ? 'earthHideCityLabels' : 'earthShowCityLabels')"
+          :title="t(showCityLabels ? 'earthHideCityLabels' : 'earthShowCityLabels')"
+          :aria-pressed="showCityLabels"
+          @click="toggleCityLabels"
+        >
+          <MapPinIcon
+            class="h-4 w-4"
+            :class="{ 'opacity-40': !showCityLabels }"
+          />
+        </button>
+        <button
+          class="btn btn-ghost btn-sm btn-square"
           :aria-label="t(rotationPaused ? 'earthResumeRotation' : 'earthPauseRotation')"
           :title="t(rotationPaused ? 'earthResumeRotation' : 'earthPauseRotation')"
           :aria-pressed="rotationPaused"
@@ -318,6 +330,7 @@ import {
   ArrowsPointingOutIcon,
   EyeIcon,
   EyeSlashIcon,
+  MapPinIcon,
   PauseIcon,
   PlayIcon,
 } from '@heroicons/vue/24/outline'
@@ -350,6 +363,7 @@ const downloadTotalBytes = ref(DBIP_COMPRESSED_BYTES)
 const originIP = ref('')
 const originStatus = ref<'loading' | 'ready' | 'error'>('loading')
 const showOriginIP = ref(false)
+const showCityLabels = ref(true)
 const rotationPaused = ref(false)
 const expanded = ref(false)
 const routeCount = ref(0)
@@ -622,6 +636,11 @@ const toggleRotation = () => {
   renderer.value?.setAutoRotation(!rotationPaused.value)
 }
 
+const toggleCityLabels = () => {
+  showCityLabels.value = !showCityLabels.value
+  renderer.value?.setCityLabelsVisible(showCityLabels.value)
+}
+
 const handleKeydown = (event: KeyboardEvent) => {
   if (event.key === 'Escape' && expanded.value) expanded.value = false
 }
@@ -671,6 +690,7 @@ const initialize = async () => {
 
     renderer.value = createdRenderer
     createdRenderer.setAutoRotation(!rotationPaused.value)
+    createdRenderer.setCityLabelsVisible(showCityLabels.value)
     scheduleRouteRefresh()
   } catch {
     canvasRef.value?.replaceChildren()

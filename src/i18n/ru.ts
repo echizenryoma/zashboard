@@ -513,6 +513,8 @@ const ru: LANG_MESSAGE = {
   earthOriginAPI: 'Сервис публичного IP',
   earthLocalIP: 'Локальный IP',
   earthToggleIP: 'Показать или скрыть локальный IP',
+  earthHideCityLabels: 'Скрыть названия городов',
+  earthShowCityLabels: 'Показать названия городов',
   earthPauseRotation: 'Остановить вращение Земли',
   earthResumeRotation: 'Продолжить вращение Земли',
   earthExpand: 'Развернуть глобус',

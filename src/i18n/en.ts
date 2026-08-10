@@ -510,6 +510,8 @@ const en = {
   earthOriginAPI: 'Public IP service',
   earthLocalIP: 'Local IP',
   earthToggleIP: 'Show or hide local IP',
+  earthHideCityLabels: 'Hide city names',
+  earthShowCityLabels: 'Show city names',
   earthPauseRotation: 'Pause globe rotation',
   earthResumeRotation: 'Resume globe rotation',
   earthExpand: 'Expand globe view',
