@@ -146,6 +146,7 @@ export enum LOG_LEVEL {
   Error = 'error',
   Fatal = 'fatal',
   Panic = 'panic',
+  Silent = 'silent',
 }
 
 export enum ROUTE_NAME {

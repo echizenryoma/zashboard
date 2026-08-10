@@ -133,7 +133,7 @@ const soft = computed(() => {
     // 所以按内核各自支持的取值逐档点亮,拼装见 assembly/logs。
     // trace:sing-box 与 honk 有,mihomo 没有
     traceLogLevel: singbox || honk,
-    // fatal / panic:仅 sing-box
+    // fatal / panic / silent:仅 sing-box
     extraLogLevels: singbox,
   }
 })

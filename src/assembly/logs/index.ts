@@ -21,7 +21,9 @@ export const supportedLogLevels = computed(() => {
   const levels = [LOG_LEVEL.Debug, LOG_LEVEL.Info, LOG_LEVEL.Warning, LOG_LEVEL.Error]
 
   if (can('traceLogLevel')) levels.unshift(LOG_LEVEL.Trace)
-  if (can('extraLogLevels')) levels.push(LOG_LEVEL.Fatal, LOG_LEVEL.Panic)
+  if (can('extraLogLevels')) {
+    levels.push(LOG_LEVEL.Fatal, LOG_LEVEL.Panic, LOG_LEVEL.Silent)
+  }
 
   return levels
 })
