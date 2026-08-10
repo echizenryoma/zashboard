@@ -335,7 +335,7 @@ import {
   type GeoWorkerRequest,
   type GeoWorkerResponse,
 } from './earth/types'
-import type { EarthRenderer } from './earth/EarthRenderer'
+import type { EarthRenderer } from './earth/earthRenderer'
 
 const { t } = useI18n()
 const canvasRef = ref<HTMLElement>()
@@ -659,7 +659,7 @@ const initialize = async () => {
   await nextTick()
 
   try {
-    const { createEarthRenderer } = await import('./earth/EarthRenderer')
+    const { createEarthRenderer } = await import('./earth/earthRenderer')
 
     if (!canvasRef.value || disposed) return
     const createdRenderer = await createEarthRenderer(canvasRef.value, {
