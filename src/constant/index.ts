@@ -103,6 +103,12 @@ export enum CONNECTION_DISPLAY_STYLE {
   TABLE = 'table',
 }
 
+// 日志/规则页的展示形态,没有 AUTO —— 由用户在各自的 Ctrl 设置里显式选。
+export enum LIST_DISPLAY_STYLE {
+  CARD = 'card',
+  TABLE = 'table',
+}
+
 export enum RULE_TAB_TYPE {
   RULES = 'rules',
   PROVIDER = 'ruleProvider',
