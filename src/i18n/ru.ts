@@ -329,7 +329,10 @@ const ru: LANG_MESSAGE = {
   currentBackendUnavailable:
     'Текущий бэкенд недоступен. Попробуйте переключиться на другой бэкенд?',
   confirm: 'Подтвердить',
-  backendSwitchTo: 'Бэкенд переключен на {backend}',
+  backendSwitched: 'Бэкенд переключён',
+  backendConnecting: 'Подключение...',
+  backendReachable: 'Подключено',
+  backendUnreachable: 'Ошибка подключения',
 
   // Backend settings
   ipv6Test: 'IPv6-тест',

@@ -327,7 +327,10 @@ const en = {
   currentBackendUnavailable:
     'The current backend is unavailable. Would you like to switch to another backend?',
   confirm: 'Confirm',
-  backendSwitchTo: 'Switched backend to {backend}',
+  backendSwitched: 'Backend switched',
+  backendConnecting: 'Connecting...',
+  backendReachable: 'Connected',
+  backendUnreachable: 'Connection failed',
 
   // Backend settings
   ipv6Test: 'IPv6 test',

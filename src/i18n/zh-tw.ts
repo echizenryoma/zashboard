@@ -327,7 +327,10 @@ const zhTW: LANG_MESSAGE = {
   DNSQuery: 'DNS 查詢',
   currentBackendUnavailable: '當前後端不可用，嘗試切換到其他後端?',
   confirm: '確定',
-  backendSwitchTo: '已切換後端為{backend}',
+  backendSwitched: '已切換後端',
+  backendConnecting: '正在連線...',
+  backendReachable: '連線正常',
+  backendUnreachable: '連線失敗',
 
   // Backend settings
   ipv6Test: 'IPv6 測試',
