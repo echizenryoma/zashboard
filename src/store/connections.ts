@@ -98,7 +98,8 @@ export const initConnections = () => {
           const start = dayjs(getConnectionStart(conn))
 
           if (now.diff(start, 'minute') > autoDisconnectIdleUDPTime.value) {
-            disconnectByIdAPI(conn.id)
+            // 后台自动清理,不是用户点的,失败不打扰
+            disconnectByIdAPI(conn.id).catch(() => {})
           }
         })
     })

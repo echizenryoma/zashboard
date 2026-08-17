@@ -101,7 +101,8 @@ const probeBackend = async (backend: Backend) => {
   isCoreUpdateAvailable.value = await fetchBackendUpdateAvailableAPI()
 
   if (isCoreUpdateAvailable.value && autoUpgradeCore.value) {
-    upgradeCoreAPI('auto')
+    // 自动升级不是用户点的,失败静默
+    upgradeCoreAPI('auto').catch(() => {})
   }
 }
 
@@ -200,7 +201,8 @@ export const isUIUpdateAvailable = ref(false)
 export const checkUIUpdate = async () => {
   isUIUpdateAvailable.value = await fetchIsUIUpdateAvailable()
   if (isUIUpdateAvailable.value && autoUpgradeDashboard.value) {
-    upgradeUIAPI()
+    // 自动升级不是用户点的,失败静默
+    upgradeUIAPI().catch(() => {})
   }
 }
 
