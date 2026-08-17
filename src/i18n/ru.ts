@@ -285,6 +285,7 @@ const ru: LANG_MESSAGE = {
   truncateProxyName: 'Усечение имени прокси',
   disableProxiesPageTextSelect: 'Запретить выделение текста на странице прокси',
   sourceIPLabels: 'Метки исходного IP',
+  resolveClientHostname: 'Разрешать имена исходных IP',
   proxyPreviewType: 'Тип предварительного просмотра прокси',
   auto: 'Авто',
   dots: 'Точки',

@@ -283,6 +283,7 @@ const en = {
   truncateProxyName: 'Truncate proxy name',
   disableProxiesPageTextSelect: 'Disable text selection on proxies page',
   sourceIPLabels: 'Source IP labels',
+  resolveClientHostname: 'Resolve source IP hostnames',
   proxyPreviewType: 'Proxy preview type',
   auto: 'Auto',
   dots: 'Dots',

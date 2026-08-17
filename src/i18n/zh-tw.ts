@@ -284,6 +284,7 @@ const zhTW: LANG_MESSAGE = {
   truncateProxyName: '截斷節點名稱',
   disableProxiesPageTextSelect: '禁用代理頁文字選取',
   sourceIPLabels: '源IP標籤',
+  resolveClientHostname: '反向解析來源 IP 主機名稱',
   proxyPreviewType: '節點預覽類型',
   auto: '自動',
   dots: '點',

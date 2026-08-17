@@ -284,6 +284,7 @@ const zh: LANG_MESSAGE = {
   truncateProxyName: '截断节点名称',
   disableProxiesPageTextSelect: '禁用代理页文字选中',
   sourceIPLabels: '源IP标签',
+  resolveClientHostname: '反向解析源 IP 主机名',
   proxyPreviewType: '节点预览类型',
   auto: '自动',
   dots: '点',
