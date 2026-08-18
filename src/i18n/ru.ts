@@ -104,6 +104,18 @@ const ru: LANG_MESSAGE = {
   fontSize: 'Размер шрифта',
   defaultFont: 'По умолчанию',
 
+  // Taildrop
+  taildropSendFiles: 'Отправить файлы',
+  taildropSending: 'Отправка',
+  taildropReceiving: 'Получение',
+  taildropFiles: 'Полученные файлы',
+  taildropEmpty: 'Нет файлов',
+  taildropTo: 'Кому: {name}',
+  taildropFrom: 'От: {name}',
+  taildropFileCount: 'Файлов: {count}',
+  taildropDropHint: 'Перетащите файлы сюда или нажмите для выбора',
+  deleteAll: 'Удалить все',
+
   // USB/IP
   usbip: 'USB/IP',
   usbipServerTagged: 'USB/IP: {tag}',

@@ -34,6 +34,8 @@ import { computed, ref } from 'vue'
 const USBIP_MIN_API_VERSION = 2
 // OpenVPN 需要 sing-box gRPC API v3(SubscribeOpenVPNStatus 流)
 const OPENVPN_MIN_API_VERSION = 3
+// Taildrop 需要 sing-box gRPC API v4(SubscribeTaildropInbox / SendTaildropFiles 等)
+const TAILDROP_MIN_API_VERSION = 4
 
 export enum Channel {
   Clash = 'clash',
@@ -95,6 +97,7 @@ const hard = computed(() => {
     startedAt: singbox,
     usbip: singbox && apiVersion.value >= USBIP_MIN_API_VERSION,
     openvpn: singbox && apiVersion.value >= OPENVPN_MIN_API_VERSION,
+    taildrop: singbox && apiVersion.value >= TAILDROP_MIN_API_VERSION,
   }
 })
 

@@ -102,6 +102,18 @@ const en = {
   fontSize: 'Font Size',
   defaultFont: 'Default',
 
+  // Taildrop
+  taildropSendFiles: 'Send files',
+  taildropSending: 'Sending',
+  taildropReceiving: 'Receiving',
+  taildropFiles: 'Received files',
+  taildropEmpty: 'No files',
+  taildropTo: 'To {name}',
+  taildropFrom: 'From {name}',
+  taildropFileCount: '{count} file | {count} files',
+  taildropDropHint: 'Drop files here to send, or click to select',
+  deleteAll: 'Delete all',
+
   // USB/IP
   usbip: 'USB/IP',
   usbipServerTagged: 'USB/IP: {tag}',

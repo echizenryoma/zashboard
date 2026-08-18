@@ -104,6 +104,18 @@ const zhTW: LANG_MESSAGE = {
   fontSize: '字型大小',
   defaultFont: '預設',
 
+  // Taildrop
+  taildropSendFiles: '傳送檔案',
+  taildropSending: '傳送中',
+  taildropReceiving: '接收中',
+  taildropFiles: '已接收檔案',
+  taildropEmpty: '暫無檔案',
+  taildropTo: '傳往 {name}',
+  taildropFrom: '來自 {name}',
+  taildropFileCount: '{count} 個檔案',
+  taildropDropHint: '拖曳檔案到此傳送，或點選選擇',
+  deleteAll: '全部刪除',
+
   // USB/IP
   usbip: 'USB/IP',
   usbipServerTagged: 'USB/IP：{tag}',
