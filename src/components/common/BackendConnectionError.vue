@@ -45,7 +45,7 @@
           </button>
           <button
             class="btn btn-sm flex-1"
-            @click="showEditModal = true"
+            @click="editActiveBackend"
           >
             {{ $t('editBackendTitle') }}
           </button>
@@ -58,7 +58,7 @@
               v-for="backend in otherBackends"
               :key="backend.uuid"
               class="hover:bg-base-200 flex items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors"
-              @click="activeUuid = backend.uuid"
+              @click="setActiveBackend(backend.uuid)"
             >
               <ServerIcon class="text-base-content/40 h-4 w-4 flex-none" />
               <span class="min-w-0 flex-1 truncate text-sm">
@@ -82,38 +82,37 @@
 
         <button
           class="btn btn-ghost btn-sm"
-          @click="manageBackends"
+          @click="openBackendManager()"
         >
-          {{ $t('backend') }}
+          {{ $t('manageBackends') }}
         </button>
       </div>
     </div>
   </Transition>
-
-  <EditBackendModal
-    v-model="showEditModal"
-    :default-backend-uuid="activeUuid || ''"
-  />
 </template>
 
 <script setup lang="ts">
 import { probeBackend } from '@/assembly/backend'
 import { startBackendSession } from '@/assembly/session'
 import { backendProbe } from '@/assembly/version'
-import EditBackendModal from '@/components/settings/backend/EditBackendModal.vue'
 import { ROUTE_NAME } from '@/constant'
 import { describeConnectionError } from '@/helper/connectivity'
 import { showNotification } from '@/helper/notification'
 import { getBackendProbeUrl, getLabelFromBackend } from '@/helper/utils'
-import router from '@/router'
-import { activeBackend, activeUuid, backendList } from '@/store/setup'
+import {
+  activeBackend,
+  activeUuid,
+  backendList,
+  backendManagerView,
+  openBackendManager,
+  setActiveBackend,
+} from '@/store/setup'
 import { ChevronRightIcon, ExclamationTriangleIcon, ServerIcon } from '@heroicons/vue/24/outline'
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const AUTO_SWITCH_TIMEOUT = 8000
 
-const showEditModal = ref(false)
 const isSwitching = ref(false)
 const detail = ref('')
 
@@ -136,11 +135,11 @@ watch(
   { immediate: true },
 )
 
-// 编辑弹窗自己会实时探测,盖在它上面只会挡路;
-// Setup 页本来就是管理后端的地方,不必再盖一层。
+// 管理面板自己会实时探测,盖在它上面只会挡路;
+// Setup 页本来就是登录后端的地方,不必再盖一层。
 const route = useRoute()
 const visible = computed(
-  () => failed.value && !showEditModal.value && route.name !== ROUTE_NAME.setup,
+  () => failed.value && backendManagerView.value === null && route.name !== ROUTE_NAME.setup,
 )
 
 const label = computed(() => (activeBackend.value ? getLabelFromBackend(activeBackend.value) : ''))
@@ -175,6 +174,11 @@ watch(
 
 const retry = () => startBackendSession()
 
+const editActiveBackend = () => {
+  if (!activeUuid.value) return
+  openBackendManager({ mode: 'edit', uuid: activeUuid.value })
+}
+
 // 一个个试太慢,同时打出去,谁先通用谁。
 const switchToReachableBackend = async () => {
   if (isSwitching.value) return
@@ -190,17 +194,13 @@ const switchToReachableBackend = async () => {
     ).catch(() => null)
 
     if (reachable) {
-      activeUuid.value = reachable.uuid
+      setActiveBackend(reachable.uuid)
     } else {
       showNotification({ content: 'noReachableBackend', type: 'alert-error' })
     }
   } finally {
     isSwitching.value = false
   }
-}
-
-const manageBackends = () => {
-  router.push({ name: ROUTE_NAME.setup })
 }
 </script>
 

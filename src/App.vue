@@ -6,6 +6,7 @@ import { computed, onMounted, ref, type Ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 import BackendConnectionError from './components/common/BackendConnectionError.vue'
 import BackendSwitchToast from './components/common/BackendSwitchToast.vue'
+import BackendManager from './components/settings/backend/BackendManager.vue'
 import ConfirmDialogHost from './components/common/ConfirmDialogHost.vue'
 import { useKeyboard } from './composables/keyboard'
 import { EMOJIS, FONTS } from './constant'
@@ -26,7 +27,7 @@ import {
   font,
   theme,
 } from './store/settings'
-import { activeUuid, backendList } from './store/setup'
+import { backendList, setActiveBackend } from './store/setup'
 import type { Backend } from './types'
 
 const app = ref<HTMLElement>()
@@ -168,7 +169,7 @@ const autoSwitchToURLBackendIfExists = () => {
   if (backend) {
     for (const b of backendList.value) {
       if (isSameBackend(b, backend)) {
-        activeUuid.value = b.uuid
+        setActiveBackend(b.uuid)
         return
       }
     }
@@ -221,6 +222,7 @@ useKeyboard()
     <ConfirmDialogHost />
     <BackendSwitchToast />
     <BackendConnectionError />
+    <BackendManager />
     <div
       ref="toast"
       class="toast-sm toast toast-end toast-top z-[100000] max-w-80 text-sm md:max-w-96 md:translate-y-8"
