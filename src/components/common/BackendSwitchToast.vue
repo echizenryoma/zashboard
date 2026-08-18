@@ -4,7 +4,55 @@
       v-if="visible && activeBackend"
       class="pointer-events-none fixed inset-x-0 top-0 z-[100001] flex justify-end pt-[calc(0.75rem+env(safe-area-inset-top,0px))] pr-[calc(0.75rem+env(safe-area-inset-right,0px))] pl-3"
     >
+      <!-- 窄屏挤不下多行卡片,压成一行:后端名 + 状态,错误详情让位给重试按钮。 -->
       <div
+        v-if="isMiddleScreen"
+        class="bg-base-100/95 border-base-border pointer-events-auto flex w-full items-center gap-2 rounded-full border py-2 pr-2 pl-3 shadow-lg backdrop-blur"
+      >
+        <span
+          v-if="status === 'probing'"
+          class="loading loading-spinner loading-xs text-primary flex-none"
+        ></span>
+        <CheckCircleIcon
+          v-else-if="status === 'connected'"
+          class="text-success h-4 w-4 flex-none"
+        />
+        <ExclamationTriangleIcon
+          v-else
+          class="text-error h-4 w-4 flex-none"
+        />
+
+        <span class="min-w-0 flex-1 truncate text-sm font-medium">{{ label }}</span>
+        <span
+          class="flex-none text-xs"
+          :class="statusTextClass"
+        >
+          {{ statusText }}
+        </span>
+        <span
+          v-if="status === 'connected'"
+          class="text-base-content/50 flex-none text-xs"
+        >
+          {{ latency }} ms
+        </span>
+
+        <button
+          v-if="status === 'failed'"
+          class="btn btn-xs flex-none"
+          @click="retry"
+        >
+          {{ $t('retry') }}
+        </button>
+        <button
+          class="btn btn-circle btn-ghost btn-xs flex-none"
+          @click="hide"
+        >
+          <XMarkIcon class="h-3.5 w-3.5" />
+        </button>
+      </div>
+
+      <div
+        v-else
         class="bg-base-100/95 border-base-border pointer-events-auto flex w-full max-w-sm gap-3 rounded-xl border p-3 shadow-lg backdrop-blur"
       >
         <div
@@ -75,7 +123,7 @@
 <script setup lang="ts">
 import { startBackendSession } from '@/assembly/session'
 import { backendProbe, version } from '@/assembly/version'
-import { getLabelFromBackend, getUrlFromBackend } from '@/helper/utils'
+import { getLabelFromBackend, getUrlFromBackend, isMiddleScreen } from '@/helper/utils'
 import { activeBackend, activeUuid } from '@/store/setup'
 import {
   ArrowsRightLeftIcon,
@@ -84,11 +132,17 @@ import {
   XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import BackendVersion from './BackendVersion.vue'
 
-// 连上了就没什么可说的,收起来;连不上则留在屏幕上,等用户重试或去改配置。
-const AUTO_HIDE_DELAY = 2500
+// 有结论就该让位,连不上也一样 —— 提示只是提示,长期占着屏幕反而挡路;
+// 失败多留一会儿,给用户看清原因、够到重试按钮的时间。
+const AUTO_HIDE_DELAY = {
+  connected: 2500,
+  failed: 5000,
+}
 
+const { t } = useI18n()
 const visible = ref(false)
 let hideTimer = -1
 
@@ -125,16 +179,39 @@ const accentClass = computed(() => {
   }
 })
 
+const statusText = computed(() => {
+  switch (status.value) {
+    case 'connected':
+      return t('backendReachable')
+    case 'failed':
+      return t('backendUnreachable')
+    default:
+      return t('backendConnecting')
+  }
+})
+
+const statusTextClass = computed(() => {
+  switch (status.value) {
+    case 'connected':
+      return 'text-success'
+    case 'failed':
+      return 'text-error'
+    default:
+      return 'text-base-content/70'
+  }
+})
+
 watch(status, (value) => {
   if (!visible.value) return
 
   clearTimeout(hideTimer)
-  if (value === 'connected') {
-    hideTimer = setTimeout(hide, AUTO_HIDE_DELAY)
+  if (value !== 'probing') {
+    hideTimer = setTimeout(hide, AUTO_HIDE_DELAY[value])
   }
 })
 
 // 重试 = 对同一个后端重开一次会话:重新探测 + 重新拉数据 + 重连各常驻流。
+// 探测会把状态打回 probing,上面的 watcher 借此把倒计时清掉,重来一轮。
 const retry = () => {
   clearTimeout(hideTimer)
   startBackendSession()
