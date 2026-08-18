@@ -17,7 +17,6 @@ const ru: LANG_MESSAGE = {
   backendType: 'Тип бэкенда',
   clashApi: 'Clash API',
   singboxApi: 'sing-box API',
-  singboxConnectionFailed: 'Не удалось подключиться к API sing-box',
   skip: 'Пропустить',
   // Tools
   networkQuality: 'Качество сети',
@@ -326,13 +325,28 @@ const ru: LANG_MESSAGE = {
   secondaryPathTip: 'Если присутствует, начните с "/", в противном случае оставьте пустым.',
   logRetentionLimit: 'Лимит хранения журнала',
   DNSQuery: 'DNS-запрос',
-  currentBackendUnavailable:
-    'Текущий бэкенд недоступен. Попробуйте переключиться на другой бэкенд?',
   confirm: 'Подтвердить',
   backendSwitched: 'Бэкенд переключён',
   backendConnecting: 'Подключение...',
   backendReachable: 'Подключено',
   backendUnreachable: 'Ошибка подключения',
+  switchToAnotherBackend: 'Переключиться на другой бэкенд',
+  autoSwitchBackend: 'Переключиться на первый доступный бэкенд',
+  noReachableBackend: 'Ни один из других бэкендов недоступен.',
+
+  // Connection diagnosis
+  diagnosisUnauthorized: 'Неверный пароль: бэкенд отклонил учётные данные.',
+  diagnosisTimeout: 'Бэкенд не ответил вовремя.',
+  diagnosisBadEndpoint: 'адрес доступен, но это не тот API, либо путь указан неверно.',
+  diagnosisOffline: 'Браузер офлайн; проверьте сетевое подключение.',
+  diagnosisCorsBlocked:
+    'Бэкенд доступен, но браузер заблокировал ответ: бэкенд не разрешает этот источник (CORS). Задайте external-controller-cors в конфигурации ядра.',
+  diagnosisMixedContent:
+    'Браузер заблокировал запрос: HTTPS-страница не может обращаться к HTTP-бэкенду. Откройте панель по HTTP или настройте HTTPS для API.',
+  diagnosisMixedContentOrUnreachable:
+    'Бэкенд недоступен — либо он работает, но браузер запретил HTTPS-странице обращаться к HTTP-бэкенду; попробуйте открыть панель по HTTP.',
+  diagnosisUnreachable:
+    'Бэкенд недоступен; проверьте правильность адреса и порта, а также запущено ли ядро.',
 
   // Backend settings
   ipv6Test: 'IPv6-тест',

@@ -17,7 +17,6 @@ const zhTW: LANG_MESSAGE = {
   backendType: '後端類型',
   clashApi: 'Clash API',
   singboxApi: 'sing-box API',
-  singboxConnectionFailed: '無法連線 sing-box API',
   skip: '跳過',
   // 工具頁
   networkQuality: '網路品質',
@@ -325,12 +324,27 @@ const zhTW: LANG_MESSAGE = {
   secondaryPathTip: '如果有的話以/開頭，沒有則留空不填',
   logRetentionLimit: '日誌保留條數',
   DNSQuery: 'DNS 查詢',
-  currentBackendUnavailable: '當前後端不可用，嘗試切換到其他後端?',
   confirm: '確定',
   backendSwitched: '已切換後端',
   backendConnecting: '正在連線...',
   backendReachable: '連線正常',
   backendUnreachable: '連線失敗',
+  switchToAnotherBackend: '切換到其他後端',
+  autoSwitchBackend: '切換到第一個可用的後端',
+  noReachableBackend: '其他後端也都連不上',
+
+  // Connection diagnosis
+  diagnosisUnauthorized: '密碼不對，後端拒絕了這次請求',
+  diagnosisTimeout: '後端沒有在規定時間內回應',
+  diagnosisBadEndpoint: '位址能連上，但對面不是這個 API，或者路徑寫錯了',
+  diagnosisOffline: '瀏覽器目前處於離線狀態，請檢查網路連線',
+  diagnosisCorsBlocked:
+    '後端能連上，但瀏覽器按同源策略攔下了回應：後端沒有放行當前來源（CORS）。請在核心設定裡設置 external-controller-cors',
+  diagnosisMixedContent:
+    '瀏覽器攔下了這次請求：HTTPS 頁面不能存取 HTTP 後端。請用 HTTP 開啟面板，或者給 API 配上 HTTPS',
+  diagnosisMixedContentOrUnreachable:
+    '後端連不上 —— 也可能後端是好的，只是瀏覽器不允許 HTTPS 頁面存取 HTTP 後端；可以試著用 HTTP 開啟面板',
+  diagnosisUnreachable: '後端連不上，請檢查位址與連接埠是否正確、核心是否在執行',
 
   // Backend settings
   ipv6Test: 'IPv6 測試',

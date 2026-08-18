@@ -83,6 +83,10 @@ export const getSingboxUrlFromBackend = (
 export const getSingboxSecret = (end: Pick<Backend, 'type' | 'password'>) =>
   end.type === 'singbox' ? end.password || '' : ''
 
+// 探测 / 诊断打的那个地址:sing-box 走 gRPC baseUrl,其余走 Clash REST 根路径。
+export const getBackendProbeUrl = (end: Omit<Backend, 'uuid'>) =>
+  end.type === 'singbox' ? getSingboxUrlFromBackend(end) : getUrlFromBackend(end)
+
 export const getLabelFromBackend = (end: Omit<Backend, 'uuid'>) => {
   return end.label || `${end.host}:${end.port}`
 }

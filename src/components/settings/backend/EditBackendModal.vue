@@ -2,7 +2,7 @@
   <DialogWrapper
     v-model="isVisible"
     :title="t('editBackendTitle')"
-    @enter="!isSaving && handleSave()"
+    @enter="canSave && handleSave()"
   >
     <div class="flex flex-col gap-4">
       <div class="flex flex-col gap-1">
@@ -91,6 +91,15 @@
         </div>
       </div>
 
+      <ReachabilityIndicator
+        v-if="editForm"
+        class="min-h-5"
+        :status="reachability.status.value"
+        :latency="reachability.latency.value"
+        :message="reachability.message.value"
+        @retry="reachability.retry"
+      />
+
       <div class="flex justify-end gap-2">
         <button
           class="btn btn-sm"
@@ -102,7 +111,7 @@
         <button
           class="btn btn-primary btn-sm"
           @click="handleSave"
-          :disabled="isSaving"
+          :disabled="!canSave"
         >
           <span
             v-if="isSaving"
@@ -116,9 +125,11 @@
 </template>
 
 <script setup lang="ts">
-import { isBackendAvailable, isSingboxChannelAvailable } from '@/assembly/backend'
+import { probeBackend } from '@/assembly/backend'
 import DialogWrapper from '@/components/common/DialogWrapper.vue'
+import ReachabilityIndicator from '@/components/common/ReachabilityIndicator.vue'
 import TextInput from '@/components/common/TextInput.vue'
+import { useBackendReachability } from '@/composables/backendReachability'
 import { showNotification } from '@/helper/notification'
 import { getLabelFromBackend } from '@/helper/utils'
 import { activeBackend, backendList, updateBackend } from '@/store/setup'
@@ -148,6 +159,10 @@ const isVisible = computed({
 const editForm = ref<Omit<Backend, 'uuid'> | null>(null)
 const selectedBackendUuid = ref('')
 const isSaving = ref(false)
+
+// 编辑期间实时探测:地址 / 密码改成什么样才通,改的时候就看得见。
+const reachability = useBackendReachability(editForm)
+const canSave = computed(() => reachability.status.value === 'online' && !isSaving.value)
 
 const selectedBackend = computed(
   () => backendList.value.find((backend) => backend.uuid === selectedBackendUuid.value) || null,
@@ -191,24 +206,19 @@ const handleCancel = () => {
   reset()
 }
 
+// 保存前再确认一次连通性。改错地址就存下去,下次打开面板才发现连不上,
+// 那时已经离开这个表单了 —— 所以拦在这里,原因由上面的指示器给出。
 const handleSave = async () => {
   if (!editForm.value || !selectedBackend.value) return
   isSaving.value = true
 
   try {
     const composed: Omit<Backend, 'uuid'> = { ...editForm.value }
-    const testBackend: Backend = { uuid: selectedBackend.value.uuid, ...composed }
+    const result = await probeBackend({ uuid: selectedBackend.value.uuid, ...composed })
 
-    if (composed.type === 'singbox') {
-      if (!(await isSingboxChannelAvailable(testBackend, 10000))) {
-        showNotification({ content: t('singboxConnectionFailed'), type: 'alert-error' })
-        return
-      }
-    } else {
-      if (!(await isBackendAvailable(testBackend, 10000))) {
-        showNotification({ content: t('backendConnectionFailed'), type: 'alert-error' })
-        return
-      }
+    if (!result.ok) {
+      reachability.retry()
+      return
     }
 
     updateBackend(selectedBackend.value.uuid, composed)

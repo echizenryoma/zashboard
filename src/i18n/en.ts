@@ -15,7 +15,6 @@ const en = {
   backendType: 'Backend Type',
   clashApi: 'Clash API',
   singboxApi: 'sing-box API',
-  singboxConnectionFailed: 'Failed to connect to the sing-box API',
   skip: 'Skip',
   // Tools page
   networkQuality: 'Network Quality',
@@ -324,13 +323,28 @@ const en = {
   secondaryPathTip: 'If present, start with "/", otherwise leave empty.',
   logRetentionLimit: 'Log retention limit',
   DNSQuery: 'DNS query',
-  currentBackendUnavailable:
-    'The current backend is unavailable. Would you like to switch to another backend?',
   confirm: 'Confirm',
   backendSwitched: 'Backend switched',
   backendConnecting: 'Connecting...',
   backendReachable: 'Connected',
   backendUnreachable: 'Connection failed',
+  switchToAnotherBackend: 'Switch to another backend',
+  autoSwitchBackend: 'Switch to the first reachable backend',
+  noReachableBackend: 'None of the other backends are reachable.',
+
+  // Connection diagnosis
+  diagnosisUnauthorized: 'Wrong password: the backend rejected the credentials.',
+  diagnosisTimeout: 'The backend did not respond in time.',
+  diagnosisBadEndpoint: 'the address is reachable but is not this API, or the path is wrong.',
+  diagnosisOffline: 'The browser is offline; check your network connection.',
+  diagnosisCorsBlocked:
+    'The backend is reachable, but the browser blocked the response: the backend does not allow this origin (CORS). Set external-controller-cors in the core config.',
+  diagnosisMixedContent:
+    'The browser blocked the request: an HTTPS page cannot access an HTTP backend. Open the dashboard over HTTP, or serve the API over HTTPS.',
+  diagnosisMixedContentOrUnreachable:
+    'The backend is unreachable — or, if it is running, the browser blocked this HTTPS page from accessing the HTTP backend; try opening the dashboard over HTTP.',
+  diagnosisUnreachable:
+    'The backend is unreachable; check that the address and port are correct and that the core is running.',
 
   // Backend settings
   ipv6Test: 'IPv6 test',

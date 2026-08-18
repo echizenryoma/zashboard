@@ -4,6 +4,7 @@
 import './assembly/session'
 import { computed, onMounted, ref, type Ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
+import BackendConnectionError from './components/common/BackendConnectionError.vue'
 import BackendSwitchToast from './components/common/BackendSwitchToast.vue'
 import ConfirmDialogHost from './components/common/ConfirmDialogHost.vue'
 import { useKeyboard } from './composables/keyboard'
@@ -219,6 +220,7 @@ useKeyboard()
     <RouterView />
     <ConfirmDialogHost />
     <BackendSwitchToast />
+    <BackendConnectionError />
     <div
       ref="toast"
       class="toast-sm toast toast-end toast-top z-[100000] max-w-80 text-sm md:max-w-96 md:translate-y-8"
