@@ -21,8 +21,10 @@ import { fetchRules } from '@/assembly/rules'
 import { restartCoreAPI } from '@/assembly/version'
 import { isSettingHidden } from '@/composables/settings'
 import { BACKEND_ITEM_KEYS } from '@/config/settingsItems'
+import { showConfirmDialog } from '@/helper/confirmDialog'
 import { showNotification } from '@/helper/notification'
 import { notifyRequestError } from '@/helper/requestError'
+import { i18n } from '@/i18n'
 import { activeBackend } from '@/store/setup'
 import {
   ArrowDownTrayIcon,
@@ -70,8 +72,17 @@ const runOnce = async (
   request: () => Promise<unknown>,
   successMessage: string,
   afterSuccess?: () => void,
+  /** 会打断代理服务的动作先问一句(i18n key)。确认弹窗的遮罩盖住了两处入口,不怕重入。 */
+  confirm?: { title: string; message: string },
 ) => {
   if (running.value) return
+  if (confirm) {
+    const { confirmed } = await showConfirmDialog({
+      title: i18n.global.t(confirm.title),
+      message: i18n.global.t(confirm.message),
+    })
+    if (!confirmed) return
+  }
   running.value = true
   try {
     await request()
@@ -113,8 +124,12 @@ export const backendActions = computed<BackendAction[]>(() => {
       opensModal: false,
       // 内核重启完才有东西可拉,立刻打过去只会撞在重启的空档上。
       run: () =>
-        runOnce(isCoreRestarting, restartCoreAPI, 'restartCoreSuccess', () =>
-          setTimeout(reloadAll, 500),
+        runOnce(
+          isCoreRestarting,
+          restartCoreAPI,
+          'restartCoreSuccess',
+          () => setTimeout(reloadAll, 500),
+          { title: 'restartCore', message: 'restartCoreConfirm' },
         ),
     })
   }
@@ -126,7 +141,11 @@ export const backendActions = computed<BackendAction[]>(() => {
       icon: ArrowPathIcon,
       running: isConfigReloading.value,
       opensModal: false,
-      run: () => runOnce(isConfigReloading, reloadConfigsAPI, 'reloadConfigsSuccess', reloadAll),
+      run: () =>
+        runOnce(isConfigReloading, reloadConfigsAPI, 'reloadConfigsSuccess', reloadAll, {
+          title: 'reloadConfigs',
+          message: 'reloadConfigsConfirm',
+        }),
     })
   }
 

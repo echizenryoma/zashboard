@@ -50,12 +50,16 @@
 <script setup lang="ts">
 import { upgradeCoreAPI } from '@/assembly/version'
 import { handlerUpgradeSuccess } from '@/helper'
+import { showConfirmDialog } from '@/helper/confirmDialog'
 import { notifyRequestError } from '@/helper/requestError'
 import { fetchConfigs } from '@/assembly/config'
 import { fetchProxies } from '@/assembly/proxies'
 import { fetchRules } from '@/assembly/rules'
 import { onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import DialogWrapper from '../../common/DialogWrapper.vue'
+
+const { t } = useI18n()
 
 const reloadAll = () => {
   fetchConfigs()
@@ -71,9 +75,23 @@ onMounted(() => {
   isReady.value = true
 })
 
+const UPGRADE_LABELS: Record<'release' | 'alpha' | 'auto', string> = {
+  auto: 'upgradeCore',
+  release: 'upgradeToRelease',
+  alpha: 'upgradeToAlpha',
+}
+
 const isCoreUpgrading = ref(false)
 const handlerClickUpgradeCore = async (type: 'release' | 'alpha' | 'auto') => {
   if (isCoreUpgrading.value) return
+
+  // 升级会重启内核,误点的代价不小 —— 先问一句。
+  const { confirmed } = await showConfirmDialog({
+    title: t(UPGRADE_LABELS[type]),
+    message: t('upgradeCoreConfirm'),
+  })
+
+  if (!confirmed || isCoreUpgrading.value) return
 
   upgradingType.value = type
   isCoreUpgrading.value = true

@@ -268,6 +268,8 @@ const en = {
   updated: 'Updated',
   upgradeDashboard: 'Upgrade dashboard',
   reloadConfigs: 'Reload configs',
+  reloadConfigsConfirm:
+    'Reload the configuration from the backend now? Existing connections may be interrupted.',
   updateConfigs: 'Update configs',
   updateConfigsSuccess: 'Configs updated successfully',
   configFilePath: 'Config file path',
@@ -288,6 +290,8 @@ const en = {
   backend: 'Backend',
   tunMode: 'TUN mode',
   upgradeCore: 'Upgrade core',
+  upgradeCoreConfirm:
+    'Upgrade the core now? The core will restart and the proxy service will be briefly interrupted.',
   upgradeToRelease: 'Upgrade to stable release',
   upgradeToAlpha: 'Upgrade to alpha release',
   updateGeoDatabase: 'Update GEO database',
@@ -328,6 +332,8 @@ const en = {
   emoji: 'Emoji',
   unauthorizedTip: 'Unauthorized, please log in again.',
   restartCore: 'Restart core',
+  restartCoreConfirm:
+    'Restart the core now? The proxy service will be briefly interrupted and existing connections will be dropped.',
   checkCoreUpgrade: 'Check for core upgrades',
   autoUpgradeDashboard: 'Auto-upgrade dashboard',
   autoUpgradeCore: 'Auto-upgrade core',

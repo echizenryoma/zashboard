@@ -270,6 +270,8 @@ const ru: LANG_MESSAGE = {
   updated: 'Обновлено',
   upgradeDashboard: 'Обновить панель до новой версии',
   reloadConfigs: 'Перезагрузить конфигурации',
+  reloadConfigsConfirm:
+    'Перезагрузить конфигурацию сейчас? Существующие соединения могут быть прерваны.',
   updateConfigs: 'Обновить конфигурации',
   updateConfigsSuccess: 'Конфигурации успешно обновлены',
   configFilePath: 'Путь к файлу конфигурации',
@@ -290,6 +292,8 @@ const ru: LANG_MESSAGE = {
   backend: 'Бэкенд',
   tunMode: 'Режим Tun',
   upgradeCore: 'Обновить ядро до новой версии',
+  upgradeCoreConfirm:
+    'Обновить ядро сейчас? Ядро будет перезапущено, работа прокси ненадолго прервётся.',
   upgradeToRelease: 'Обновить ядро до Release',
   upgradeToAlpha: 'Обновить ядро до Alpha',
   updateGeoDatabase: 'Обновить GEO',
@@ -330,6 +334,8 @@ const ru: LANG_MESSAGE = {
   emoji: 'Emoji',
   unauthorizedTip: 'Не авторизован, пожалуйста, войдите снова.',
   restartCore: 'Перезапустить ядро',
+  restartCoreConfirm:
+    'Перезапустить ядро сейчас? Работа прокси ненадолго прервётся, существующие соединения будут разорваны.',
   checkCoreUpgrade: 'Проверить доступность обновления ядра',
   autoUpgradeDashboard: 'Автоматически обновлять панель до новой версии',
   autoUpgradeCore: 'Автоматически обновлять ядро до новой версии',
