@@ -228,6 +228,7 @@ import {
 import { backgroundImage } from '@/helper/indexeddb'
 import { showNotification } from '@/helper/notification'
 import { notifyRequestError } from '@/helper/requestError'
+import { useStorage } from '@/helper/storage'
 import {
   connectionFilter,
   connectionTabShow,
@@ -270,7 +271,6 @@ import {
   type SortingState,
 } from '@tanstack/vue-table'
 import { useVirtualizer } from '@tanstack/vue-virtual'
-import { useStorage } from '@vueuse/core'
 import dayjs from 'dayjs'
 import { twMerge } from 'tailwind-merge'
 import { computed, h, ref, type VNode } from 'vue'

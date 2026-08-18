@@ -187,6 +187,7 @@ import { ConnectionHistoryType } from '@/helper/indexeddb'
 import SelectInput from '@/components/common/SelectInput.vue'
 import { showNotification } from '@/helper/notification'
 import { getIPLabelFromMap } from '@/helper/sourceip'
+import { useStorage } from '@/helper/storage'
 import { useTooltip } from '@/helper/tooltip'
 import { prettyBytesHelper } from '@/helper/utils'
 import {
@@ -211,7 +212,6 @@ import {
   type SortingState,
 } from '@tanstack/vue-table'
 import { useVirtualizer } from '@tanstack/vue-virtual'
-import { useStorage } from '@vueuse/core'
 import dayjs from 'dayjs'
 import { computed, h, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -382,7 +382,16 @@ const autoCleanupInterval = useStorage<AutoCleanupInterval>(
   'config/connection-history-auto-cleanup-interval',
   AutoCleanupInterval.Month,
 )
-const startTime = useStorage<number>('cache/connection-history-stats-start-time', Date.now())
+// 这是统计起始时间戳,首次访问就要落盘固定下来,否则每次刷新都会被视为"刚开始统计",
+// 自动清理永远不会触发 —— 与其他纯 UI 偏好不同,这里需要保留 writeDefaults
+const startTime = useStorage<number>(
+  'cache/connection-history-stats-start-time',
+  Date.now(),
+  undefined,
+  {
+    writeDefaults: true,
+  },
+)
 const totalConnectionsTip = computed(() => {
   const dayjsTime = dayjs(startTime.value)
 

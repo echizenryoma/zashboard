@@ -1,5 +1,5 @@
+import { useStorage } from '@/helper/storage'
 import type { Backend } from '@/types'
-import { useStorage } from '@vueuse/core'
 import { isEqual, omit } from 'lodash'
 import { v4 as uuid } from 'uuid'
 import { computed, ref } from 'vue'

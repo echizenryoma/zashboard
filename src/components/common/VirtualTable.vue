@@ -95,6 +95,7 @@
 import { TABLE_SIZE } from '@/constant'
 import { backgroundImage } from '@/helper/indexeddb'
 import { showNotification } from '@/helper/notification'
+import { useStorage } from '@/helper/storage'
 import { tableSize } from '@/store/settings'
 import { ArrowDownCircleIcon, ArrowUpCircleIcon, CircleStackIcon } from '@heroicons/vue/24/outline'
 import {
@@ -109,7 +110,6 @@ import {
   type VisibilityState,
 } from '@tanstack/vue-table'
 import { useVirtualizer } from '@tanstack/vue-virtual'
-import { useStorage } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
