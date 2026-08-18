@@ -16,7 +16,7 @@
             :data="uploadSpeedHistory"
             :y-axis-floor="60000"
             :window-seconds="timeSaved"
-            color="info"
+            color="secondary"
             :name="t('upload')"
             :label-formatter="speedLabelFormatter"
             :tooltip-formatter="speedTooltipFormatter"

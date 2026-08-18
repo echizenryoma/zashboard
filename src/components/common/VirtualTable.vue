@@ -59,7 +59,7 @@
             v-for="virtualRow in virtualRows"
             :key="virtualRow.key.toString()"
             :style="{ height: `${estimateSize}px` }"
-            class="hover:bg-primary! hover:text-primary-content!"
+            class="hover:bg-primary/85! hover:text-primary-content!"
             :class="[
               virtualRow.index % 2 === 0 ? 'bg-base-150' : 'bg-base-100',
               rowClass?.(rows[virtualRow.index].original),

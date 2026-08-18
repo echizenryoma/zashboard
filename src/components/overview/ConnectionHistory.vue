@@ -146,7 +146,7 @@
                 height: `${virtualRow.size}px`,
                 transform: `translateY(${virtualRow.start - index * virtualRow.size}px)`,
               }"
-              class="hover:bg-primary! hover:text-primary-content whitespace-nowrap"
+              class="hover:bg-primary/85! hover:text-primary-content whitespace-nowrap"
               :class="virtualRow.index % 2 === 1 && 'bg-base-150'"
             >
               <td
