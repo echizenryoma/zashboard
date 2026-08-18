@@ -1,5 +1,10 @@
 <template>
+  <!--
+    DialogWrapper 会 teleport 到 #app-content,而那正是挂载本组件的 App 根节点 ——
+    首帧它还没进 DOM。等挂载完再渲染,与同处 App 根下的 BackendManager 一致。
+  -->
   <DialogWrapper
+    v-if="isReady"
     v-model="modalValue"
     :title="$t('upgradeCore')"
   >
@@ -49,7 +54,7 @@ import { notifyRequestError } from '@/helper/requestError'
 import { fetchConfigs } from '@/assembly/config'
 import { fetchProxies } from '@/assembly/proxies'
 import { fetchRules } from '@/assembly/rules'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import DialogWrapper from '../../common/DialogWrapper.vue'
 
 const reloadAll = () => {
@@ -60,6 +65,12 @@ const reloadAll = () => {
 
 const upgradingType = ref<'release' | 'alpha' | 'auto'>('auto')
 const modalValue = defineModel<boolean>()
+
+const isReady = ref(false)
+onMounted(() => {
+  isReady.value = true
+})
+
 const isCoreUpgrading = ref(false)
 const handlerClickUpgradeCore = async (type: 'release' | 'alpha' | 'auto') => {
   if (isCoreUpgrading.value) return

@@ -7,6 +7,9 @@ import { RouterView } from 'vue-router'
 import BackendConnectionError from './components/common/BackendConnectionError.vue'
 import BackendSwitchToast from './components/common/BackendSwitchToast.vue'
 import BackendManager from './components/settings/backend/BackendManager.vue'
+import UpdateConfigModal from './components/settings/backend/UpdateConfigModal.vue'
+import UpgradeCoreModal from './components/settings/backend/UpgradeCoreModal.vue'
+import { showUpdateConfigModal, showUpgradeCoreModal } from './composables/backendActions'
 import ConfirmDialogHost from './components/common/ConfirmDialogHost.vue'
 import { useKeyboard } from './composables/keyboard'
 import { EMOJIS, FONTS } from './constant'
@@ -223,6 +226,9 @@ useKeyboard()
     <BackendSwitchToast />
     <BackendConnectionError />
     <BackendManager />
+    <!-- 后端维护动作的弹窗:侧边栏菜单和设置页都会拉起,挂在这里两处入口才都有效。 -->
+    <UpgradeCoreModal v-model="showUpgradeCoreModal" />
+    <UpdateConfigModal v-model="showUpdateConfigModal" />
     <div
       ref="toast"
       class="app-toast-region"
