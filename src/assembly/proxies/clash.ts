@@ -368,7 +368,9 @@ export const allProxiesLatencyTest = async () => {
     )
   }
 
-  const proxyNode = Object.keys(proxyMap.value).filter((proxy) => !isProxyGroup(proxy))
+  const proxyNode = Object.keys(proxyMap.value).filter(
+    (proxy) => !isProxyGroup(proxy) && isLatencyTestable(proxy),
+  )
 
   return testLatencyOneByOneWithTip(i18n.global.t('all'), proxyNode)
 }
