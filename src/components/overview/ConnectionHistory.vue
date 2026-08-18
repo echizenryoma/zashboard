@@ -26,42 +26,33 @@
       >
         <div class="flex items-center gap-2">
           <span class="text-base-content/60 text-xs">{{ $t('aggregateBy') }}</span>
-          <select
+          <SelectInput
             v-model="aggregationType"
             class="select select-bordered select-sm w-32"
-          >
-            <option :value="ConnectionHistoryType.SourceIP">
-              {{ $t('aggregateBySourceIP') }}
-            </option>
-            <option :value="ConnectionHistoryType.Destination">
-              {{ $t('aggregateByDestination') }}
-            </option>
-            <option :value="ConnectionHistoryType.Process">{{ $t('aggregateByProcess') }}</option>
-            <option :value="ConnectionHistoryType.Outbound">
-              {{ $t('aggregateByOutbound') }}
-            </option>
-            <option :value="ConnectionHistoryType.ProxyGroup">
-              {{ $t('aggregateByProxyGroup') }}
-            </option>
-          </select>
+            :options="[
+              { value: ConnectionHistoryType.SourceIP, label: $t('aggregateBySourceIP') },
+              {
+                value: ConnectionHistoryType.Destination,
+                label: $t('aggregateByDestination'),
+              },
+              { value: ConnectionHistoryType.Process, label: $t('aggregateByProcess') },
+              { value: ConnectionHistoryType.Outbound, label: $t('aggregateByOutbound') },
+              { value: ConnectionHistoryType.ProxyGroup, label: $t('aggregateByProxyGroup') },
+            ]"
+          />
         </div>
         <div class="flex items-center gap-2">
           <span class="text-base-content/60 text-xs">{{ $t('autoCleanupInterval') }}</span>
-          <select
+          <SelectInput
             v-model="autoCleanupInterval"
             class="select select-bordered select-sm w-28"
-          >
-            <option :value="AutoCleanupInterval.Never">
-              {{ $t('autoCleanupIntervalNever') }}
-            </option>
-            <option :value="AutoCleanupInterval.Week">{{ $t('autoCleanupIntervalWeek') }}</option>
-            <option :value="AutoCleanupInterval.Month">
-              {{ $t('autoCleanupIntervalMonth') }}
-            </option>
-            <option :value="AutoCleanupInterval.Quarter">
-              {{ $t('autoCleanupIntervalQuarter') }}
-            </option>
-          </select>
+            :options="[
+              { value: AutoCleanupInterval.Never, label: $t('autoCleanupIntervalNever') },
+              { value: AutoCleanupInterval.Week, label: $t('autoCleanupIntervalWeek') },
+              { value: AutoCleanupInterval.Month, label: $t('autoCleanupIntervalMonth') },
+              { value: AutoCleanupInterval.Quarter, label: $t('autoCleanupIntervalQuarter') },
+            ]"
+          />
         </div>
       </div>
     </div>
@@ -193,6 +184,7 @@
 
 <script setup lang="ts">
 import { ConnectionHistoryType } from '@/helper/indexeddb'
+import SelectInput from '@/components/common/SelectInput.vue'
 import { showNotification } from '@/helper/notification'
 import { getIPLabelFromMap } from '@/helper/sourceip'
 import { useTooltip } from '@/helper/tooltip'

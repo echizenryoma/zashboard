@@ -34,13 +34,14 @@
     <div class="flex gap-2">
       <div class="flex w-24 flex-none flex-col gap-1">
         <label class="text-sm">{{ $t('protocol') }}</label>
-        <select
+        <SelectInput
           class="select select-sm w-full"
           v-model="model.protocol"
-        >
-          <option value="http">HTTP</option>
-          <option value="https">HTTPS</option>
-        </select>
+          :options="[
+            { value: 'http', label: 'HTTP' },
+            { value: 'https', label: 'HTTPS' },
+          ]"
+        />
       </div>
       <div class="flex min-w-0 flex-1 flex-col gap-1">
         <label class="text-sm">{{ $t('host') }}</label>
@@ -104,6 +105,7 @@
 
 <script setup lang="ts">
 import TextInput from '@/components/common/TextInput.vue'
+import SelectInput from '@/components/common/SelectInput.vue'
 import type { Backend } from '@/types'
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/outline'
 
