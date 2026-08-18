@@ -225,7 +225,7 @@ useKeyboard()
     <BackendManager />
     <div
       ref="toast"
-      class="toast-sm toast toast-end toast-top z-[100000] max-w-80 text-sm md:max-w-96 md:translate-y-8"
+      class="app-toast-region"
     />
   </div>
 </template>
