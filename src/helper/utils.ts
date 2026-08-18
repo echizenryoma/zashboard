@@ -134,6 +134,23 @@ export const findScrollableParent = (el: HTMLElement | null): HTMLElement | null
   return parent ? findScrollableParent(parent) : null
 }
 
+// 新格式 protocol=http/https 优先,旧格式 http / https 标记参数仍保留兼容,最后兜底当前页面协议。
+const getProtocolFromQuery = (query: URLSearchParams) => {
+  const protocol = query.get('protocol')
+
+  if (protocol === 'http' || protocol === 'https') {
+    return protocol
+  }
+  if (query.get('http')) {
+    return 'http'
+  }
+  if (query.get('https')) {
+    return 'https'
+  }
+
+  return window.location.protocol.replace(':', '')
+}
+
 export const getBackendFromUrl = () => {
   const query = new URLSearchParams(
     window.location.search || location.hash.match(/\?.*$/)?.[0]?.replace('?', ''),
@@ -143,11 +160,7 @@ export const getBackendFromUrl = () => {
     return {
       // 后端类型:'singbox' 走 sing-box API(gRPC),其余(含缺省)按 'clash' 处理。
       type: (query.get('type') === 'singbox' ? 'singbox' : 'clash') as BackendType,
-      protocol: query.get('http')
-        ? 'http'
-        : query.get('https')
-          ? 'https'
-          : window.location.protocol.replace(':', ''),
+      protocol: getProtocolFromQuery(query),
       secondaryPath: query.get('secondaryPath') || '',
       host: query.get('hostname') as string,
       port: query.get('port') as string,

@@ -13,22 +13,14 @@
   <div class="flex flex-col gap-3">
     <div class="flex flex-col gap-1">
       <label class="text-sm">{{ $t('backendType') }}</label>
-      <div class="join w-full">
-        <button
-          class="btn btn-sm join-item flex-1"
-          :class="model.type === 'clash' ? 'btn-primary' : 'border-base-border border'"
-          @click="model.type = 'clash'"
-        >
-          {{ $t('clashApi') }}
-        </button>
-        <button
-          class="btn btn-sm join-item flex-1"
-          :class="model.type === 'singbox' ? 'btn-primary' : 'border-base-border border'"
-          @click="model.type = 'singbox'"
-        >
-          {{ $t('singboxApi') }}
-        </button>
-      </div>
+      <SelectInput
+        class="select select-sm w-full"
+        v-model="model.type"
+        :options="[
+          { value: 'clash', label: $t('clashApi') },
+          { value: 'singbox', label: $t('singboxApi') },
+        ]"
+      />
     </div>
 
     <div class="flex gap-2">
@@ -63,32 +55,30 @@
       </div>
     </div>
 
-    <div class="flex gap-2">
-      <div
-        v-if="model.type === 'clash'"
-        class="flex min-w-0 flex-1 flex-col gap-1"
-      >
-        <label class="flex items-center gap-1 text-sm">
-          <span class="truncate">{{ $t('secondaryPath') }} ({{ $t('optional') }})</span>
-          <span
-            class="tooltip flex-none"
-            :data-tip="$t('secondaryPathTip')"
-          >
-            <QuestionMarkCircleIcon class="h-4 w-4" />
-          </span>
-        </label>
-        <TextInput
-          class="w-full"
-          v-model="model.secondaryPath"
-        />
-      </div>
-      <div class="flex min-w-0 flex-1 flex-col gap-1">
-        <label class="truncate text-sm">{{ $t('label') }}</label>
-        <TextInput
-          class="w-full"
-          v-model="model.label"
-        />
-      </div>
+    <div
+      v-if="model.type === 'clash'"
+      class="flex flex-col gap-1"
+    >
+      <label class="flex items-center gap-1 text-sm">
+        <span>{{ $t('secondaryPath') }} ({{ $t('optional') }})</span>
+        <span
+          class="tooltip flex-none"
+          :data-tip="$t('secondaryPathTip')"
+        >
+          <QuestionMarkCircleIcon class="h-4 w-4" />
+        </span>
+      </label>
+      <TextInput
+        class="w-full"
+        v-model="model.secondaryPath"
+      />
+    </div>
+    <div class="flex flex-col gap-1">
+      <label class="text-sm">{{ $t('label') }}</label>
+      <TextInput
+        class="w-full"
+        v-model="model.label"
+      />
     </div>
 
     <div class="flex flex-col gap-1">
