@@ -50,11 +50,6 @@ if (backendList.value.some((item) => !item.type || 'singboxChannel' in item)) {
   backendList.value = migrateBackendList(backendList.value as LegacyBackend[])
 }
 
-export const showBackendSettingsDialog = ref(false)
-
-export const toggleBackendSettingsDialog = () => {
-  showBackendSettingsDialog.value = !showBackendSettingsDialog.value
-}
 export const activeUuid = useStorage<string>('setup/active-uuid', '')
 export const activeBackend = computed(() =>
   backendList.value.find((backend) => backend.uuid === activeUuid.value),

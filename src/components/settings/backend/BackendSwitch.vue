@@ -12,8 +12,25 @@
   空间不够时向上翻。
 -->
 <template>
-  <div class="w-full">
+  <div :class="compact ? 'flex-none' : 'w-full'">
+    <!-- 折叠的侧边栏只剩一列图标,状态点叠在图标角上 —— 不展开也能看出当前后端活没活。 -->
     <button
+      v-if="compact"
+      ref="triggerRef"
+      class="btn btn-circle btn-sm relative"
+      :aria-label="$t('backend')"
+      @click="toggle"
+      @mouseenter="showLabelTip"
+    >
+      <ServerIcon class="h-5 w-5" />
+      <span
+        class="ring-base-100 absolute right-0.5 bottom-0.5 h-2 w-2 rounded-full ring-2"
+        :class="compactDotClass"
+      ></span>
+    </button>
+
+    <button
+      v-else
       ref="triggerRef"
       class="btn btn-sm w-full flex-nowrap justify-between font-normal"
       @click="toggle"
@@ -95,6 +112,7 @@
 <script setup lang="ts">
 import BackendStatusDot from '@/components/common/BackendStatusDot.vue'
 import { useBackendListProbe } from '@/composables/backendListProbe'
+import { useTooltip } from '@/helper/tooltip'
 import { getLabelFromBackend } from '@/helper/utils'
 import {
   activeBackend,
@@ -103,12 +121,14 @@ import {
   openBackendManager,
   setActiveBackend,
 } from '@/store/setup'
-import { ChevronUpDownIcon, Cog6ToothIcon } from '@heroicons/vue/24/outline'
+import { ChevronUpDownIcon, Cog6ToothIcon, ServerIcon } from '@heroicons/vue/24/outline'
 import { computed, onBeforeUnmount, onMounted, ref, type CSSProperties } from 'vue'
 
 const GAP = 4
 const MIN_WIDTH = 224
 const VIEWPORT_PADDING = 8
+
+withDefaults(defineProps<{ compact?: boolean }>(), { compact: false })
 
 const triggerRef = ref<HTMLButtonElement>()
 const panelRef = ref<HTMLDivElement>()
@@ -121,7 +141,31 @@ const isReady = ref(false)
 // 只在展开时探测,收起就停 —— 侧边栏常驻,不该一直在后台打请求。
 const { stateOf } = useBackendListProbe(isOpen)
 
+// 当前后端的状态不依赖展开:stateOf 会优先用会话自己的探测结果(backendProbe),
+// 所以折叠状态下那个点也一直是准的。
 const activeState = computed(() => stateOf.value(activeUuid.value || ''))
+
+const compactDotClass = computed(() => {
+  if (!activeBackend.value) return 'bg-base-content/25'
+
+  switch (activeState.value.status) {
+    case 'online':
+      return 'bg-success'
+    case 'offline':
+      return 'bg-error'
+    case 'checking':
+      return 'bg-warning animate-pulse'
+    default:
+      return 'bg-base-content/25'
+  }
+})
+
+const { showTip } = useTooltip()
+
+const showLabelTip = (event: MouseEvent) => {
+  if (!activeBackend.value) return
+  showTip(event, getLabelFromBackend(activeBackend.value), { placement: 'right' })
+}
 
 const updatePosition = () => {
   const trigger = triggerRef.value
