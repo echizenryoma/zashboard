@@ -51,7 +51,7 @@ export const getLatencyByName = (proxyName: string, groupName?: string) => {
 }
 
 export const getHistoryByName = (proxyName: string, groupName?: string) => {
-  if (independentLatencyTest.value && can('independentLatency')) {
+  if (groupName && independentLatencyTest.value && can('independentLatency')) {
     const proxyNode = proxyMap.value[proxyName]
     const url = getTestUrl(groupName)
 
