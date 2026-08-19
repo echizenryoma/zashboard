@@ -60,7 +60,7 @@
         <div
           v-if="isOpen"
           ref="panelRef"
-          class="border-base-border bg-base-100 fixed z-[100000] flex flex-col gap-1 overflow-hidden rounded-lg border p-1 shadow-lg"
+          class="border-base-border bg-base-100 fixed z-[998] flex flex-col gap-1 overflow-hidden rounded-lg border p-1 shadow-lg"
           :style="panelStyle"
         >
           <div
@@ -129,7 +129,7 @@
         <div
           v-if="isOpen && isActionsOpen"
           ref="actionsPanelRef"
-          class="border-base-border bg-base-100 fixed z-[100001] flex flex-col gap-1 overflow-y-auto rounded-lg border p-1 shadow-lg"
+          class="border-base-border bg-base-100 fixed z-[998] flex flex-col gap-1 overflow-y-auto rounded-lg border p-1 shadow-lg"
           :style="actionsPanelStyle"
         >
           <button
