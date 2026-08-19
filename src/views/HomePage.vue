@@ -20,15 +20,8 @@
       >
         <div class="absolute flex h-full w-full flex-col overflow-y-auto">
           <Transition
-            v-if="isMiddleScreen"
-            :name="route.meta.transition as string"
-          >
-            <Component :is="Component" />
-          </Transition>
-          <Transition
-            v-else
-            name="page"
-            mode="out-in"
+            :name="pageTransitionName"
+            :mode="pageTransitionMode"
           >
             <Component :is="Component" />
           </Transition>
@@ -85,6 +78,7 @@ import { startBackendSession } from '@/assembly/session'
 import SideBar from '@/components/sidebar/SideBar.vue'
 import { dockTop } from '@/composables/paddingViews'
 import { checkUIUpdate } from '@/assembly/version'
+import { pageTransitionMode, pageTransitionName } from '@/composables/pageTransition'
 import { useSwipeRouter } from '@/composables/swipe'
 import { ROUTE_ICON_MAP } from '@/constant'
 import { renderRoutes } from '@/helper'

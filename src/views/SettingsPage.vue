@@ -2,6 +2,7 @@
   <div
     ref="scrollContainerRef"
     class="relative h-full overflow-y-scroll"
+    :class="settingsPaneTransition && 'overflow-x-hidden'"
     :style="padding"
   >
     <!-- 移动端与窄内容区共用顶部控制栏；宽屏改用页内左侧导航。 -->
@@ -83,6 +84,8 @@
     <main
       v-if="showMobileIndex"
       class="mx-auto w-full max-w-2xl p-3 pb-6"
+      :class="settingsPaneTransition === 'pop' && 'settings-pane-pop'"
+      @animationend.self="clearPaneAnimation"
     >
       <div class="mb-4 px-1 pt-2">
         <h1 class="text-xl font-semibold tracking-tight">{{ $t('settings') }}</h1>
@@ -126,11 +129,13 @@
     <div
       v-show="!showMobileIndex"
       class="mx-auto w-full"
-      :class="
+      :class="[
         showSideNavigation
           ? 'grid max-w-5xl grid-cols-[14rem_minmax(0,48rem)] gap-8 p-6'
-          : 'max-w-3xl p-3 md:p-6'
-      "
+          : 'max-w-3xl p-3 md:p-6',
+        settingsPaneTransition === 'push' && 'settings-pane-push',
+      ]"
+      @animationend.self="clearPaneAnimation"
     >
       <aside
         v-if="showSideNavigation"
@@ -253,15 +258,11 @@ import ProxiesSettings from '@/components/settings/proxies/ProxiesSettings.vue'
 import SettingsCustomizationDialog from '@/components/settings/SettingsCustomizationDialog.vue'
 import SettingsSearch from '@/components/settings/SettingsSearch.vue'
 import { usePaddingForViews } from '@/composables/paddingViews'
-import { isSettingVisible } from '@/composables/settings'
-import {
-  DEFAULT_SETTINGS_MENU_ORDER,
-  SETTINGS_CATEGORIES,
-  SETTINGS_MENU_LABELS,
-} from '@/config/settingsItems'
+import { settingsPaneTransition } from '@/composables/pageTransition'
+import { useSettingsSection, visibleSectionKeys } from '@/composables/settingsSection'
+import { SETTINGS_CATEGORIES, SETTINGS_MENU_LABELS } from '@/config/settingsItems'
 import { SETTINGS_MENU_KEY } from '@/constant'
 import { isMiddleScreen, isPWA } from '@/helper/utils'
-import { settingsMenuOrder } from '@/store/settings'
 import {
   AdjustmentsHorizontalIcon,
   ArrowPathIcon,
@@ -297,8 +298,17 @@ const { padding } = usePaddingForViews({ offsetTop: 0, offsetBottom: 8 })
 
 const customizationOpen = ref(false)
 const mobileSearchOpen = ref(false)
-const enteredFromMobileIndex = ref(false)
 const showSideNavigation = computed(() => !isMiddleScreen.value && width.value >= 900)
+const {
+  sectionKey: routeSection,
+  enterSection,
+  exitSection,
+  enteredFromMobileIndex,
+} = useSettingsSection()
+
+const clearPaneAnimation = () => {
+  settingsPaneTransition.value = ''
+}
 
 const categoryPresentation: Record<SETTINGS_MENU_KEY, { icon: Component; component: Component }> = {
   [SETTINGS_MENU_KEY.general]: { icon: HomeIcon, component: ZashboardSettings },
@@ -316,20 +326,10 @@ const allCategoryComponents: CategoryView[] = SETTINGS_CATEGORIES.map((category)
 }))
 
 const menuItems = computed(() => {
-  const order = [
-    ...settingsMenuOrder.value,
-    ...DEFAULT_SETTINGS_MENU_ORDER.filter((key) => !settingsMenuOrder.value.includes(key)),
-  ]
-  return order.flatMap((key) => {
+  return visibleSectionKeys.value.flatMap((key) => {
     const category = allCategoryComponents.find((item) => item.key === key)
-    return category && isSettingVisible(category.key) ? [category] : []
+    return category ? [category] : []
   })
-})
-
-const routeSection = computed(() => {
-  const value = route.query.section
-  if (typeof value !== 'string') return undefined
-  return menuItems.value.find((item) => item.key === value)?.key
 })
 
 const activeCategory = computed(() => {
@@ -363,36 +363,13 @@ const normalizeQuery = async () => {
 }
 
 const selectSection = async (key: SETTINGS_MENU_KEY, settingKey?: string) => {
-  const fromMobileIndex = showMobileIndex.value
-  const query: Record<string, string | string[] | null | undefined> = {
-    ...route.query,
-    section: key,
-  }
-  delete query.scrollTo
-  if (settingKey) query.setting = settingKey
-  else delete query.setting
-
-  if (isMiddleScreen.value) {
-    await router.push({ query })
-    if (fromMobileIndex) enteredFromMobileIndex.value = true
-  } else await router.replace({ query })
-
+  await enterSection(key, settingKey)
   if (!settingKey) scrollContainerRef.value?.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 const backToCategories = async () => {
-  if (enteredFromMobileIndex.value) {
-    enteredFromMobileIndex.value = false
-    router.back()
-    return
-  }
-
-  const query = { ...route.query }
-  delete query.section
-  delete query.setting
-  delete query.scrollTo
   mobileSearchOpen.value = false
-  await router.replace({ query })
+  await exitSection()
   scrollContainerRef.value?.scrollTo({ top: 0 })
 }
 
