@@ -497,7 +497,7 @@ const en = {
   flushSmartWeights: 'Clear smart weights',
   IPInfoAPI: 'IP info API',
   IPInfoAPITip:
-    "This API is used to look up global node IP information during IP checks, and for IP geolocation lookups in connection details and zashboard's DNS query feature.",
+    "This API is used for IP geolocation lookups in connection details and zashboard's DNS query feature. IP Check and Earth use their own API selections.",
   general: 'General',
   groupProxiesByProvider: 'Group proxies by provider',
   useSmartGroupSort: 'Sort smart groups by usage frequency',

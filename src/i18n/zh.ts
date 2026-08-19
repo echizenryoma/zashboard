@@ -486,7 +486,7 @@ const zh: LANG_MESSAGE = {
   flushSmartWeights: '清空Smart权重',
   IPInfoAPI: 'IP信息API',
   IPInfoAPITip:
-    '此API会用于IP检查中全球节点IP信息查询、连接详情中的IP地理信息查询、面板DNS查询中的IP地理信息查询。',
+    '此API仅用于连接详情与面板DNS查询中的IP地理信息查询；IP检查与地球组件使用各自的API选项。',
   general: '通用',
   groupProxiesByProvider: '节点根据提供商分组',
   useSmartGroupSort: 'Smart组根据使用频率排序',
