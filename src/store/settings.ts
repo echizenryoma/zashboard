@@ -93,8 +93,16 @@ export const theme = computed(() => {
 export const customThemes = useStorage<THEME[]>('config/custom-themes', [])
 
 const replaceLegacyTheme = (theme: string, defaultTheme: string) => {
-  if (theme === 'dark-apple') {
-    return 'dark'
+  const legacyThemeReplacements: Record<string, string> = {
+    'dark-apple': 'dark',
+    lofi: 'light',
+    wireframe: 'light',
+    black: 'dark-neutral',
+    business: 'dark-neutral',
+  }
+
+  if (theme in legacyThemeReplacements) {
+    return legacyThemeReplacements[theme]
   }
   if ([...ALL_THEME, ...customThemes.value.map((theme) => theme.name)].includes(theme)) {
     return theme
