@@ -2,7 +2,6 @@
   <DialogWrapper
     v-model="dialogVisible"
     :title="$t('customIcon')"
-    full-screen-mobile
   >
     <div class="flex flex-col gap-2 overflow-hidden text-sm">
       <!-- Add new: drop zone + inputs -->

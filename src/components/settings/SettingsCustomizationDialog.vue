@@ -3,7 +3,6 @@
     v-model="open"
     :title="$t('customizeSettingsPage')"
     box-class="w-full max-w-2xl"
-    full-screen-mobile
   >
     <div class="flex flex-col gap-4">
       <p class="text-base-content/55 text-sm">

@@ -75,7 +75,7 @@
           </div>
           <button
             type="button"
-            class="btn btn-circle btn-ghost btn-sm"
+            class="btn btn-sm min-w-11"
             :aria-label="$t('configurePorts')"
             @click="portsDialogOpen = true"
           >
@@ -146,11 +146,11 @@
           </div>
           <button
             type="button"
-            class="btn btn-circle btn-ghost btn-sm"
+            class="btn btn-sm min-w-11"
             :aria-label="$t('DNSQuery')"
             @click="dnsDialogOpen = true"
           >
-            <ChevronRightIcon class="h-4 w-4" />
+            <MagnifyingGlassIcon class="h-4 w-4" />
           </button>
         </SettingItem>
       </div>
@@ -159,7 +159,6 @@
     <DialogWrapper
       v-model="portsDialogOpen"
       :title="$t('ports')"
-      full-screen-mobile
       box-class="w-full max-w-2xl"
     >
       <BackendPortsGrid />
@@ -167,7 +166,6 @@
     <DialogWrapper
       v-model="dnsDialogOpen"
       :title="$t('DNSQuery')"
-      full-screen-mobile
       box-class="w-full max-w-2xl"
     >
       <DnsQuery />
@@ -191,7 +189,7 @@ import { BACKEND_ITEM_KEYS } from '@/config/settingsItems'
 import { notifyRequestError } from '@/helper/requestError'
 import { autoUpgradeCore, checkUpgradeCore } from '@/store/settings'
 import { activeBackend } from '@/store/setup'
-import { ChevronRightIcon } from '@heroicons/vue/24/outline'
+import { ChevronRightIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 import { computed, ref } from 'vue'
 
 const k = BACKEND_ITEM_KEYS

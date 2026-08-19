@@ -2,7 +2,6 @@
   <DialogWrapper
     v-model="model"
     :title="$t('customTheme')"
-    full-screen-mobile
   >
     <div class="divider">Color</div>
     <div class="grid grid-cols-4 gap-2">

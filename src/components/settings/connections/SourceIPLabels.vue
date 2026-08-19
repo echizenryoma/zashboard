@@ -34,7 +34,6 @@
   <DialogWrapper
     v-model="dialogVisible"
     :title="$t('sourceIPLabels')"
-    full-screen-mobile
   >
     <div class="flex flex-col gap-2 text-sm">
       <div class="border-base-content/10 rounded-box border border-dashed p-2.5">

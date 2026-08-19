@@ -22,7 +22,6 @@
   <DialogWrapper
     v-model="dialogVisible"
     :title="$t('groupTestUrls')"
-    full-screen-mobile
   >
     <div class="flex flex-col gap-2 text-sm">
       <div class="grid grid-cols-1 gap-2">
