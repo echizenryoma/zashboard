@@ -20,8 +20,8 @@
       >
         <div class="absolute flex h-full w-full flex-col overflow-y-auto">
           <Transition
-            :name="(route.meta.transition as string) || 'fade'"
             v-if="isMiddleScreen"
+            :name="route.meta.transition as string"
           >
             <Component :is="Component" />
           </Transition>

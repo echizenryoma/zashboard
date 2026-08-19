@@ -12,6 +12,7 @@
   <DialogWrapper
     v-model="dashboardSettingsDialogShow"
     :title="$t('dashboardSettings')"
+    full-screen-mobile
   >
     <template #title-right>
       <button

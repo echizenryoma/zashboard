@@ -2,6 +2,7 @@
   <DialogWrapper
     v-model="dialogVisible"
     :title="$t('keyboardShortcuts')"
+    full-screen-mobile
   >
     <div class="flex flex-col gap-3 text-sm">
       <div class="text-xs opacity-70">

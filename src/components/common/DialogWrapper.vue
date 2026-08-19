@@ -28,7 +28,12 @@
         <div
           ref="modalBoxRef"
           class="modal-box bg-base-100 relative flex flex-col overflow-hidden p-0 outline-none max-md:max-h-[85dvh] max-md:min-h-[calc(var(--dialog-viewport-height,100dvh)*0.4)]"
-          :class="[blurIntensity < 5 && 'backdrop-blur-sm!', boxClass]"
+          :class="[
+            blurIntensity < 5 && 'backdrop-blur-sm!',
+            fullScreenMobile &&
+              'max-md:h-[var(--dialog-viewport-height,100dvh)] max-md:max-h-none! max-md:w-screen max-md:max-w-none max-md:rounded-none',
+            boxClass,
+          ]"
           tabindex="-1"
           @click.stop
           @keydown.enter.self="enter"
@@ -37,12 +42,14 @@
             v-if="title && isOpen"
             id="dialog-title"
             class="border-base-content/10 relative shrink-0 border-b px-4 py-2 text-base font-bold"
+            :class="fullScreenMobile && 'max-md:pt-[calc(0.5rem+env(safe-area-inset-top))]'"
           >
             {{ title }}
             <slot name="title-right" />
             <button
               type="button"
               class="btn btn-circle btn-ghost btn-xs absolute top-2 right-2"
+              :class="fullScreenMobile && 'max-md:top-[calc(0.5rem+env(safe-area-inset-top))]'"
               aria-label="close"
               @click="close"
             >
@@ -81,7 +88,12 @@ import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { ref, watch } from 'vue'
 
 const isOpen = defineModel<boolean>()
-defineProps<{ noPadding?: boolean; boxClass?: string; title?: string }>()
+defineProps<{
+  noPadding?: boolean
+  boxClass?: string
+  title?: string
+  fullScreenMobile?: boolean
+}>()
 const emits = defineEmits<{
   (e: 'enter'): void
 }>()
