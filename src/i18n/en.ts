@@ -268,8 +268,6 @@ const en = {
   updated: 'Updated',
   upgradeDashboard: 'Upgrade dashboard',
   reloadConfigs: 'Reload configs',
-  reloadConfigsConfirm:
-    'Reload the configuration from the backend now? Existing connections may be interrupted.',
   updateConfigs: 'Update configs',
   updateConfigsSuccess: 'Configs updated successfully',
   configFilePath: 'Config file path',

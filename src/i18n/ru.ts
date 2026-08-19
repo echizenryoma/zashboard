@@ -270,8 +270,6 @@ const ru: LANG_MESSAGE = {
   updated: 'Обновлено',
   upgradeDashboard: 'Обновить панель до новой версии',
   reloadConfigs: 'Перезагрузить конфигурации',
-  reloadConfigsConfirm:
-    'Перезагрузить конфигурацию сейчас? Существующие соединения могут быть прерваны.',
   updateConfigs: 'Обновить конфигурации',
   updateConfigsSuccess: 'Конфигурации успешно обновлены',
   configFilePath: 'Путь к файлу конфигурации',

@@ -13,20 +13,19 @@
 -->
 <template>
   <div :class="compact ? 'flex-none' : 'w-full'">
-    <!-- 折叠的侧边栏只剩一列图标,状态点叠在图标角上 —— 不展开也能看出当前后端活没活。 -->
+    <!--
+      折叠的侧边栏只剩一列图标,状态就不在这儿表了:一列小按钮里再挤进一个状态点
+      (或者给图标上色)只是噪声,想知道通不通展开列表就有。这里只保留入口和名字。
+    -->
     <button
       v-if="compact"
       ref="triggerRef"
-      class="btn btn-circle btn-sm relative"
+      class="btn btn-circle btn-sm"
       :aria-label="$t('backend')"
       @click="toggle"
       @mouseenter="showLabelTip"
     >
       <ServerIcon class="h-5 w-5" />
-      <span
-        class="ring-base-100 absolute right-0.5 bottom-0.5 h-2 w-2 rounded-full ring-2"
-        :class="compactDotClass"
-      ></span>
     </button>
 
     <button
@@ -212,23 +211,8 @@ const isReady = ref(false)
 const { stateOf } = useBackendListProbe(isOpen)
 
 // 当前后端的状态不依赖展开:stateOf 会优先用会话自己的探测结果(backendProbe),
-// 所以折叠状态下那个点也一直是准的。
+// 所以展开态那个点一亮出来就是准的,不用等这一轮探测跑完。
 const activeState = computed(() => stateOf.value(activeUuid.value || ''))
-
-const compactDotClass = computed(() => {
-  if (!activeBackend.value) return 'bg-base-content/25'
-
-  switch (activeState.value.status) {
-    case 'online':
-      return 'bg-success'
-    case 'offline':
-      return 'bg-error'
-    case 'checking':
-      return 'bg-warning animate-pulse'
-    default:
-      return 'bg-base-content/25'
-  }
-})
 
 const { showTip } = useTooltip()
 

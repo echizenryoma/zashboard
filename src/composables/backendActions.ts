@@ -141,11 +141,8 @@ export const backendActions = computed<BackendAction[]>(() => {
       icon: ArrowPathIcon,
       running: isConfigReloading.value,
       opensModal: false,
-      run: () =>
-        runOnce(isConfigReloading, reloadConfigsAPI, 'reloadConfigsSuccess', reloadAll, {
-          title: 'reloadConfigs',
-          message: 'reloadConfigsConfirm',
-        }),
+      // 重载配置不动连接、也不重启内核,代价小到不值得一次确认。
+      run: () => runOnce(isConfigReloading, reloadConfigsAPI, 'reloadConfigsSuccess', reloadAll),
     })
   }
 

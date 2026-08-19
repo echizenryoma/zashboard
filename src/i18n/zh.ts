@@ -269,7 +269,6 @@ const zh: LANG_MESSAGE = {
   updated: '更新于',
   upgradeDashboard: '升级面板',
   reloadConfigs: '重载配置',
-  reloadConfigsConfirm: '确定要重载配置吗？现有连接可能会被中断。',
   updateConfigs: '更新配置',
   updateConfigsSuccess: '配置更新成功',
   configFilePath: '配置文件路径',
