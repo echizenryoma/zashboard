@@ -9,6 +9,11 @@
   @apply bg-base-100 overflow-hidden rounded-xl shadow-xs;
 }
 
+/* 页面包裹层的底色。刻意不用 bg-base-200 工具类：见 utilities/appearance.css 里的说明。 */
+.home-page {
+  @apply bg-base-200;
+}
+
 @utility floating-menu-panel {
   @apply border-base-border bg-base-100 text-base-content fixed z-[100000] overflow-y-auto rounded-lg border p-1 shadow-lg;
 }

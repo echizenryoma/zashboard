@@ -214,10 +214,10 @@
         </div>
       </aside>
 
-      <main class="min-w-0">
+      <main class="bg-base-200 min-w-0 rounded-2xl p-4">
         <header
           v-if="activeCategory"
-          class="mb-5 px-1"
+          class="mb-5"
         >
           <div class="flex items-center gap-3">
             <span
