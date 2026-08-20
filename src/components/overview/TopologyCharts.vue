@@ -7,7 +7,10 @@
       <div
         :class="
           isFullScreen
-            ? 'bg-base-100 custom-background fixed inset-0 z-[9999] flex h-screen w-screen flex-col bg-cover bg-center p-4'
+            ? [
+                'bg-base-100 fixed inset-0 z-[9999] flex h-screen w-screen flex-col bg-cover bg-center p-4',
+                backgroundImage && 'custom-background',
+              ]
             : undefined
         "
         :style="isFullScreen ? backgroundImage : undefined"
