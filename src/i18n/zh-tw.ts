@@ -590,7 +590,6 @@ const zhTW: LANG_MESSAGE = {
   settingsMenuProxies: '代理',
   settingsMenuConnections: '連接',
   settingsMenuOverview: '概覽',
-  settingsConnectedBackend: '目前連線：{name}',
   settingsDescriptionGeneral: '主題、應用更新、資料來源與互動偏好',
   settingsDescriptionOverview: '概覽卡片、啟動檢查與桌面側欄',
   settingsDescriptionBackend: '目前後端、核心維護與網路監聽',

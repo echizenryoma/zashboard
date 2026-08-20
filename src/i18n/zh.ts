@@ -590,7 +590,6 @@ const zh: LANG_MESSAGE = {
   settingsMenuProxies: '代理',
   settingsMenuConnections: '连接',
   settingsMenuOverview: '概览',
-  settingsConnectedBackend: '当前连接：{name}',
   settingsDescriptionGeneral: '主题、应用更新、数据源与交互偏好',
   settingsDescriptionOverview: '概览卡片、启动检查与桌面侧栏',
   settingsDescriptionBackend: '当前后端、内核运维与网络监听',

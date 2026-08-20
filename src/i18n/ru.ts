@@ -605,7 +605,6 @@ const ru: LANG_MESSAGE = {
   settingsMenuProxies: 'Прокси',
   settingsMenuConnections: 'Подключения',
   settingsMenuOverview: 'Обзор',
-  settingsConnectedBackend: 'Подключено: {name}',
   settingsDescriptionGeneral: 'Темы, обновления, источники данных и управление',
   settingsDescriptionOverview: 'Карточки обзора, проверки запуска и боковая панель',
   settingsDescriptionBackend: 'Активный бэкенд, обслуживание ядра и сетевые порты',

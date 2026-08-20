@@ -602,7 +602,6 @@ const en = {
   settingsMenuProxies: 'Proxies',
   settingsMenuConnections: 'Connections',
   settingsMenuOverview: 'Overview',
-  settingsConnectedBackend: 'Connected to {name}',
   settingsDescriptionGeneral: 'Themes, app updates, data sources, and interaction preferences',
   settingsDescriptionOverview: 'Overview cards, startup checks, and the desktop sidebar',
   settingsDescriptionBackend: 'Active backend, core maintenance, and network listeners',
