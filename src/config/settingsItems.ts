@@ -248,16 +248,6 @@ export const SETTINGS_CATEGORIES: SettingsCategory[] = [
     description: 'settingsDescriptionOverview',
     items: [
       {
-        key: `${SETTINGS_MENU_KEY.overview}.overviewCard`,
-        label: 'chartsCard',
-        section: 'settingsSectionCardsLayout',
-      },
-      {
-        key: `${SETTINGS_MENU_KEY.overview}.networkCard`,
-        label: 'networkCard',
-        section: 'settingsSectionCardsLayout',
-      },
-      {
         key: `${SETTINGS_MENU_KEY.overview}.splitOverviewPage`,
         label: 'splitOverviewPage',
         section: 'settingsSectionCardsLayout',

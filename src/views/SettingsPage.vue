@@ -89,7 +89,12 @@
     >
       <div class="mb-4 px-1 pt-2">
         <h1 class="text-xl font-semibold tracking-tight">{{ $t('settings') }}</h1>
-        <p class="text-base-content/55 mt-1 text-sm">{{ $t('settingsPageDescription') }}</p>
+        <p
+          v-if="connectedBackendLabel"
+          class="text-base-content/55 mt-1 truncate text-sm"
+        >
+          {{ $t('settingsConnectedBackend', { name: connectedBackendLabel }) }}
+        </p>
       </div>
 
       <div class="settings-grid">
@@ -143,6 +148,12 @@
       >
         <div class="mb-4 px-2">
           <h1 class="text-xl font-semibold tracking-tight">{{ $t('settings') }}</h1>
+          <p
+            v-if="connectedBackendLabel"
+            class="text-base-content/55 mt-1 truncate text-sm"
+          >
+            {{ $t('settingsConnectedBackend', { name: connectedBackendLabel }) }}
+          </p>
         </div>
 
         <SettingsSearch
@@ -262,7 +273,8 @@ import { settingsPaneTransition } from '@/composables/pageTransition'
 import { useSettingsSection, visibleSectionKeys } from '@/composables/settingsSection'
 import { SETTINGS_CATEGORIES, SETTINGS_MENU_LABELS } from '@/config/settingsItems'
 import { SETTINGS_MENU_KEY } from '@/constant'
-import { isMiddleScreen, isPWA } from '@/helper/utils'
+import { getLabelFromBackend, isMiddleScreen, isPWA } from '@/helper/utils'
+import { activeBackend } from '@/store/setup'
 import {
   AdjustmentsHorizontalIcon,
   ArrowPathIcon,
@@ -295,6 +307,10 @@ const router = useRouter()
 const scrollContainerRef = ref<HTMLDivElement>()
 const { width } = useElementSize(scrollContainerRef)
 const { padding } = usePaddingForViews({ offsetTop: 0, offsetBottom: 8 })
+
+const connectedBackendLabel = computed(() =>
+  activeBackend.value ? getLabelFromBackend(activeBackend.value) : '',
+)
 
 const customizationOpen = ref(false)
 const mobileSearchOpen = ref(false)
