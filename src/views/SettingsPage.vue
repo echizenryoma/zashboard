@@ -166,7 +166,7 @@
         />
 
         <nav
-          class="min-h-0 flex-1 space-y-1 overflow-y-auto"
+          class="need-blur min-h-0 flex-1 space-y-1 overflow-y-auto"
           :aria-label="$t('settingsCategory')"
         >
           <button
