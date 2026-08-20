@@ -143,7 +143,7 @@
     >
       <aside
         v-if="showSideNavigation"
-        class="sticky top-6 flex h-[calc(100dvh-3rem)] min-h-0 flex-col"
+        class="bg-base-200 sticky top-6 flex h-[calc(100dvh-3rem)] min-h-0 flex-col rounded-xl p-2"
       >
         <div class="mb-4 px-2">
           <h1 class="text-xl font-semibold tracking-tight">{{ $t('settings') }}</h1>
