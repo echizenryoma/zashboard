@@ -121,7 +121,7 @@
     @apply border-0;
   }
   @apply border-separate border-spacing-0;
-  --table-stripe: color-mix(in oklab, var(--color-base-content) 4%, transparent);
+  --table-stripe: color-mix(in oklab, var(--color-base-content) 3%, transparent);
 }
 
 /*
