@@ -3,6 +3,7 @@
     <div class="settings-section-label">{{ $t('settingsSectionApplication') }}</div>
     <div class="settings-grid">
       <SettingItem
+        v-if="showDashboardUpgrade"
         :setting-key="k.actions"
         :anchor-key="`${k.actions}.upgradeDashboard`"
       >
@@ -192,7 +193,7 @@
 </template>
 
 <script setup lang="ts">
-import { showDisplayAllFeatures } from '@/assembly/backend'
+import { can, showDisplayAllFeatures } from '@/assembly/backend'
 import { upgradeUIAPI } from '@/assembly/version'
 import DashboardSettings from '@/components/common/DashboardSettings.vue'
 import SelectInput from '@/components/common/SelectInput.vue'
@@ -263,6 +264,9 @@ const hasVisibleInteractionItems = computed(
     (!isMiddleScreen.value && isVisibleShortcuts.value) ||
     (showDisplayAllFeatures.value && isVisibleDisplayAllFeatures.value),
 )
+
+// honk 没有 /upgrade/ui,按钮点了必然 404。
+const showDashboardUpgrade = computed(() => can('dashboardUpgrade'))
 
 const isUIUpgrading = ref(false)
 const handlerClickUpgradeUI = async () => {
