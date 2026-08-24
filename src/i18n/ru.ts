@@ -17,6 +17,9 @@ const ru: LANG_MESSAGE = {
   backendType: 'Тип бэкенда',
   clashApi: 'Clash API',
   singboxApi: 'sing-box API',
+  singboxSupportEndingTitle: 'Поддержка sing-box прекращается',
+  singboxSupportEndingMessage: 'zashboard прекратит поддержку sing-box в следующем выпуске.',
+  dontShowAgain: 'Больше не показывать',
   skip: 'Пропустить',
   // Tools
   networkQuality: 'Качество сети',
@@ -323,7 +326,7 @@ const ru: LANG_MESSAGE = {
   customTheme: 'Пользовательская тема',
   unavailableProxy: 'Скрыть недоступное',
   protocolTips:
-    'Вы пытаетесь подключиться к HTTP-бэкенду, но Zashboard предоставляется через HTTPS. Это может вызвать ошибки подключения. Разрешите небезопасный контент в настройках браузера или используйте HTTP-версию панели, например, http://board.zash.run.place.',
+    'Вы пытаетесь подключиться к HTTP-бэкенду, но zashboard предоставляется через HTTPS. Это может вызвать ошибки подключения. Разрешите небезопасный контент в настройках браузера или используйте HTTP-версию панели, например, http://board.zash.run.place.',
   global: 'Глобальный',
   direct: 'Прямой',
   lowLatencyDesc: 'Желтый порог',
