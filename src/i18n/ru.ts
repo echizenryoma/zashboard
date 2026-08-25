@@ -46,6 +46,7 @@ const ru: LANG_MESSAGE = {
   restartCoreSuccess: 'Ядро успешно перезапущено',
   reloadConfigsSuccess: 'Конфигурации успешно перезагружены',
   updateGeoSuccess: 'Geo база данных успешно обновлена',
+  actionRunning: '{action}: выполняется…',
   chains: 'Цепочки',
   outbound: 'Исходящий',
   proxyGroup: 'Группа прокси',
