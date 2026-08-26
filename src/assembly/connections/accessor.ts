@@ -48,6 +48,7 @@ export interface ConnectionAccessor {
   inboundUser(connection: Connection): string
   sniffHost(connection: Connection): string
   remoteAddress(connection: Connection): string
+  isDirect(connection: Connection): boolean
   // smart 内核的降级标记;非 smart 时为 undefined。
   smartBlock(connection: Connection): string | undefined
 }
