@@ -40,6 +40,10 @@
     );
   }
 
+  .home-page {
+    background-color: transparent;
+  }
+
   .btn.btn-neutral {
     background-color: color-mix(
       in oklab,

@@ -160,10 +160,6 @@ checkUIUpdate()
 </script>
 
 <style>
-.custom-background .home-page {
-  background-color: transparent;
-}
-
 .tab-bar {
   display: flex;
   height: 3.875rem;
